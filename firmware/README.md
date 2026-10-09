@@ -2,6 +2,10 @@
 
 Biblioteca de sketches y bases reutilizables para pruebas de banco. El firmware final de cada robot permanece en su repositorio específico.
 
+## Firmwares disponibles
+
+- [RMP ESP32 Universal Test Bench](esp32/01_rmp_actuator_test/): banco web configurable para probar MUX CD74HC4067, LED, botón y dos motores en ESP32-C3/S3 Super Mini.
+
 ## Organización prevista
 
 ```text
