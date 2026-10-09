@@ -1,0 +1,28 @@
+# Sistemas operativos
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.swp
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+dist/
+build/
+
+# Logs y datos temporales
+*.log
+*.tmp
+telemetry/logs/*.csv
+
+# Arduino / PlatformIO
+.pio/
+*.elf
+*.hex
+*.bin
