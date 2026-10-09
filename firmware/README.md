@@ -55,3 +55,15 @@ Un sketch puede entrar en esta biblioteca cuando:
 - Botón de inicio, MicroStart y parada controlada.
 
 Cada firmware nuevo debe tener su propia carpeta y un `README.md`.
+
+## Regla para Arduino IDE
+
+Cada archivo `.ino` debe estar dentro de una carpeta con exactamente el mismo nombre:
+
+```text
+prueba_motores/
+├── prueba_motores.ino
+└── README.md
+```
+
+No se admiten sketches `.ino` sueltos. Esta estructura es obligatoria para que Arduino IDE reconozca y abra correctamente cada proyecto.

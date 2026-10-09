@@ -7,7 +7,26 @@ La documentación general se escribe en español. Los nombres técnicos establec
 ## Nombres
 
 - Carpetas: minúsculas y guiones, por ejemplo `prueba-motores`.
-- Sketch de Arduino: carpeta y archivo con el mismo nombre.
+- Sketch de Arduino: carpeta y archivo con el mismo nombre exacto.
+
+## Estructura obligatoria de Arduino
+
+Todo archivo principal `.ino` debe estar dentro de una carpeta con el mismo nombre, respetando también mayúsculas y minúsculas. Se mantendrá un solo sketch principal por carpeta.
+
+```text
+nombre_del_sketch/
+├── nombre_del_sketch.ino
+└── README.md
+```
+
+Ejemplo correcto:
+
+```text
+01_rmp_actuator_test/
+└── 01_rmp_actuator_test.ino
+```
+
+No se guardarán archivos `.ino` sueltos directamente dentro de `firmware/` ni dentro de las carpetas de cada plataforma.
 - Documentos principales: mayúsculas, por ejemplo `README.md`, `CHANGELOG.md`.
 - Evitar espacios y caracteres especiales en rutas nuevas.
 
