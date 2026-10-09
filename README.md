@@ -2,8 +2,6 @@
 
 Repositorio central de **RMP Robotics**: punto de entrada a todos los robots, documentación común, firmware de pruebas genérico, herramientas y plantillas reutilizables.
 
-> Cada robot mantiene su propio repositorio técnico. Este repositorio centraliza el catálogo, los recursos compartidos y las normas de organización.
-
 ## Proyectos
 
 | Robot | Categoría | Controlador | Estado | Repositorio |
