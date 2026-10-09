@@ -170,17 +170,29 @@ static const char INDEX_HTML[] PROGMEM = R"RMPHTML(
     .drive-grid button{min-height:48px}
     .movement{display:grid;grid-template-columns:repeat(3,1fr);grid-template-areas:". f ." "l s r" ". b .";gap:10px;max-width:420px;margin:auto}
     .movement button{min-height:58px}.mf{grid-area:f}.ml{grid-area:l}.ms{grid-area:s}.mr{grid-area:r}.mb{grid-area:b}
-    .sensor-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-    .sensor{background:#0c0a10;border:1px solid var(--line);border-radius:14px;padding:13px}
-    .sensor-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-    .sensor strong{font-size:13px;color:var(--violet2)}.sensor span{font-size:18px;font-weight:900}
-    .bar{height:8px;background:#26212e;border-radius:99px;overflow:hidden}
-    .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--violet),#d8b4fe);transition:width .12s}
+    .dashboard-metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:16px 0}
+    .metric{background:linear-gradient(150deg,var(--panel2),var(--panel));border:1px solid var(--line);
+      border-radius:13px;padding:13px 14px;min-width:0}
+    .metric small{display:block;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .metric strong{display:block;font-size:21px;margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .metric em{color:var(--violet2);font-size:11px;font-style:normal;font-weight:800}
+    .chart-card{margin-top:14px}
+    .chart-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+    .chart-head h3{margin:0}.chart-tools{display:flex;align-items:end;gap:9px;flex-wrap:wrap}
+    .chart-tools label{min-width:105px}.chart-tools select{padding:8px 10px;font-size:13px}
+    .chart-wrap{height:300px;border:1px solid var(--line);border-radius:13px;background:#0a0810;padding:8px;overflow:hidden}
+    .chart-wrap.history{height:260px}
+    canvas{display:block;width:100%;height:100%}
+    .legend{display:flex;gap:15px;color:var(--muted);font-size:12px;font-weight:700}
+    .legend span{display:flex;align-items:center;gap:7px}
+    .legend i{width:18px;height:3px;border-radius:9px;background:var(--violet2)}
+    .legend .line-b{background:var(--white)}
     .notice{padding:13px 15px;border-radius:12px;background:#21172d;border:1px solid #4d2d70;color:#d9c2ef;line-height:1.5;font-size:13px}
     .error{background:#351019;border-color:#7d2638;color:#ffb4c2}
     footer{text-align:center;color:#777080;font-size:12px;padding:20px}
-    @media(max-width:820px){.card,.third{grid-column:span 12}.fields{grid-template-columns:repeat(2,1fr)}.sensor-grid{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:480px){.fields{grid-template-columns:1fr}.sensor-grid{grid-template-columns:1fr}.online{display:none}.logo{width:62px}.drive-grid{grid-template-columns:1fr}}
+    @media(max-width:920px){.dashboard-metrics{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:820px){.card,.third{grid-column:span 12}.fields{grid-template-columns:repeat(2,1fr)}.chart-head{align-items:flex-start;flex-direction:column}.chart-wrap{height:255px}}
+    @media(max-width:480px){.fields{grid-template-columns:1fr}.dashboard-metrics{grid-template-columns:repeat(2,1fr)}.online{display:none}.logo{width:62px}.drive-grid{grid-template-columns:1fr}.chart-wrap{height:230px}.chart-tools{width:100%}.chart-tools label{flex:1}}
   </style>
 </head>
 <body>
@@ -327,12 +339,39 @@ static const char INDEX_HTML[] PROGMEM = R"RMPHTML(
 
   <section id="sensors" class="page">
     <div class="hero">
-      <div><h2>Sensores por MUX</h2><p class="sub">Lectura ADC de hasta 16 canales en tiempo real.</p></div>
+      <div><h2>Monitor de sensores MUX</h2><p class="sub">Perfil instantáneo e historial ADC de hasta 16 canales.</p></div>
       <div><span id="scanRate" class="pill">-- ms</span></div>
     </div>
-    <div class="notice">Escala ADC: <b>0 a 4095</b>. Los canales que exceden la cantidad configurada quedan ocultos.</div>
-    <article class="card wide" style="margin-top:16px">
-      <div id="sensorGrid" class="sensor-grid"></div>
+
+    <div class="dashboard-metrics">
+      <div class="metric"><small>Máximo ADC</small><strong id="sensorMax">0</strong><em id="sensorMaxCh">CH --</em></div>
+      <div class="metric"><small>Mínimo ADC</small><strong id="sensorMin">0</strong><em id="sensorMinCh">CH --</em></div>
+      <div class="metric"><small>Promedio</small><strong id="sensorAvg">0</strong><em>ADC</em></div>
+      <div class="metric"><small>Rango</small><strong id="sensorRange">0</strong><em>MAX − MIN</em></div>
+      <div class="metric"><small>Canales</small><strong id="sensorCount">0</strong><em>ACTIVOS</em></div>
+      <div class="metric"><small>Actualización</small><strong id="sensorPeriod">--</strong><em>MILISEGUNDOS</em></div>
+    </div>
+
+    <article class="card wide chart-card">
+      <div class="chart-head">
+        <div><h3>Perfil instantáneo</h3><p class="sub">Lectura actual de todos los canales del CD74HC4067.</p></div>
+        <span class="pill">Escala 0–4095</span>
+      </div>
+      <div class="chart-wrap"><canvas id="profileChart"></canvas></div>
+    </article>
+
+    <article class="card wide chart-card">
+      <div class="chart-head">
+        <div><h3>Historial en tiempo real</h3><p class="sub">Comparación temporal de dos canales seleccionados.</p></div>
+        <div class="chart-tools">
+          <label>Canal A<select id="historyChannelA" onchange="clearSensorHistory()"></select></label>
+          <label>Canal B<select id="historyChannelB" onchange="clearSensorHistory()"></select></label>
+          <button id="historyPause" onclick="toggleSensorHistory()">Pausar</button>
+          <button onclick="clearSensorHistory()">Limpiar</button>
+        </div>
+      </div>
+      <div class="legend"><span><i></i><b id="legendA">CH 0</b></span><span><i class="line-b"></i><b id="legendB">CH 1</b></span></div>
+      <div class="chart-wrap history" style="margin-top:10px"><canvas id="historyChart"></canvas></div>
     </article>
   </section>
 </main>
@@ -340,6 +379,7 @@ static const char INDEX_HTML[] PROGMEM = R"RMPHTML(
 
 <script>
   var activePage='config', holdTimer=null, stateTimer=null, cfg=null;
+  var sensorHistoryA=[],sensorHistoryB=[],sensorHistoryLimit=100,sensorHistoryPaused=false,lastSensorState=null;
   var fields=['muxS0','muxS1','muxS2','muxS3','muxSig','muxEnable','led','button',
     'motor1A','motor1B','motor1Pwm','motor2A','motor2B','motor2Pwm','motorEnable',
     'motorMode','buttonPull','muxChannels','adcSamples','scanIntervalMs'];
@@ -351,6 +391,7 @@ static const char INDEX_HTML[] PROGMEM = R"RMPHTML(
       document.querySelectorAll('.page').forEach(function(x){x.classList.remove('active')});
       b.classList.add('active'); activePage=b.dataset.page; document.getElementById(activePage).classList.add('active');
       if(activePage!=='actuators') stopAll();
+      if(activePage==='sensors'&&lastSensorState)updateSensorDashboard(lastSensorState,false);
     };
   });
 
@@ -406,12 +447,106 @@ static const char INDEX_HTML[] PROGMEM = R"RMPHTML(
   document.addEventListener('visibilitychange',function(){if(document.hidden)stopAll()});
 
   function buildSensors(n){
-    var g=document.getElementById('sensorGrid');g.innerHTML='';
+    var a=document.getElementById('historyChannelA'),b=document.getElementById('historyChannelB');
+    var oldA=parseInt(a.value||0),oldB=parseInt(b.value||Math.min(1,n-1));
+    a.innerHTML='';b.innerHTML='';
     for(var i=0;i<n;i++){
-      var d=document.createElement('div');d.className='sensor';d.id='sensor'+i;
-      d.innerHTML='<div class="sensor-top"><strong>CH '+i+'</strong><span id="sv'+i+'">0</span></div><div class="bar"><i id="sb'+i+'"></i></div>';
-      g.appendChild(d);
+      var oa=document.createElement('option'),ob=document.createElement('option');
+      oa.value=i;oa.textContent='CH '+i;ob.value=i;ob.textContent='CH '+i;
+      a.appendChild(oa);b.appendChild(ob);
     }
+    a.value=Math.min(oldA,n-1);
+    b.value=Math.min(oldB,n-1);
+    document.getElementById('sensorCount').textContent=n;
+    clearSensorHistory();
+  }
+  function clearSensorHistory(){
+    sensorHistoryA=[];sensorHistoryB=[];
+    drawSensorHistory();
+  }
+  function toggleSensorHistory(){
+    sensorHistoryPaused=!sensorHistoryPaused;
+    var button=document.getElementById('historyPause');
+    button.textContent=sensorHistoryPaused?'Reanudar':'Pausar';
+    button.className=sensorHistoryPaused?'success':'';
+  }
+  function prepareCanvas(id){
+    var canvas=document.getElementById(id),rect=canvas.getBoundingClientRect(),ratio=window.devicePixelRatio||1;
+    var w=Math.max(280,Math.floor(rect.width)),h=Math.max(180,Math.floor(rect.height));
+    if(canvas.width!==Math.floor(w*ratio)||canvas.height!==Math.floor(h*ratio)){
+      canvas.width=Math.floor(w*ratio);canvas.height=Math.floor(h*ratio);
+    }
+    var ctx=canvas.getContext('2d');
+    ctx.setTransform(ratio,0,0,ratio,0,0);
+    ctx.clearRect(0,0,w,h);
+    return {ctx:ctx,w:w,h:h};
+  }
+  function drawChartGrid(ctx,w,h,left,top,right,bottom){
+    var plotW=w-left-right,plotH=h-top-bottom;
+    ctx.font='11px Arial';ctx.textAlign='right';ctx.textBaseline='middle';
+    for(var i=0;i<=4;i++){
+      var y=top+plotH*i/4,value=Math.round(4095*(4-i)/4);
+      ctx.strokeStyle='#2b2635';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(w-right,y);ctx.stroke();
+      ctx.fillStyle='#777080';ctx.fillText(value,left-8,y);
+    }
+  }
+  function drawSensorProfile(values,n){
+    if(activePage!=='sensors')return;
+    var p=prepareCanvas('profileChart'),ctx=p.ctx,w=p.w,h=p.h,left=46,right=12,top=14,bottom=34;
+    drawChartGrid(ctx,w,h,left,top,right,bottom);
+    var plotW=w-left-right,plotH=h-top-bottom,slot=plotW/n,barW=Math.max(5,slot*.62);
+    var gradient=ctx.createLinearGradient(0,top,0,top+plotH);
+    gradient.addColorStop(0,'#d8b4fe');gradient.addColorStop(1,'#7c3aed');
+    ctx.textAlign='center';ctx.textBaseline='top';ctx.font='10px Arial';
+    for(var i=0;i<n;i++){
+      var value=values[i]||0,barH=plotH*Math.min(4095,value)/4095,x=left+slot*i+(slot-barW)/2,y=top+plotH-barH;
+      ctx.fillStyle=gradient;ctx.fillRect(x,y,barW,barH);
+      ctx.fillStyle='#8f8998';ctx.fillText(i,left+slot*i+slot/2,top+plotH+9);
+      if(slot>48){ctx.fillStyle='#f8f7fb';ctx.textBaseline='bottom';ctx.fillText(value,left+slot*i+slot/2,y-4);ctx.textBaseline='top';}
+    }
+  }
+  function drawSensorHistory(){
+    if(activePage!=='sensors')return;
+    var p=prepareCanvas('historyChart'),ctx=p.ctx,w=p.w,h=p.h,left=46,right=12,top=14,bottom=26;
+    drawChartGrid(ctx,w,h,left,top,right,bottom);
+    var plotW=w-left-right,plotH=h-top-bottom;
+    function line(data,color){
+      if(data.length<2)return;
+      ctx.strokeStyle=color;ctx.lineWidth=2.2;ctx.lineJoin='round';ctx.lineCap='round';ctx.beginPath();
+      for(var i=0;i<data.length;i++){
+        var x=left+plotW*i/Math.max(1,data.length-1),y=top+plotH*(1-Math.min(4095,data[i])/4095);
+        if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+    line(sensorHistoryA,'#a855f7');line(sensorHistoryB,'#f8f7fb');
+  }
+  function updateSensorDashboard(s,addHistory){
+    lastSensorState=s;
+    if(!s.channels)return;
+    var min=s.sensors[0],max=s.sensors[0],minCh=0,maxCh=0,sum=0;
+    for(var i=0;i<s.channels;i++){
+      var v=s.sensors[i];sum+=v;
+      if(v<min){min=v;minCh=i}if(v>max){max=v;maxCh=i}
+    }
+    document.getElementById('sensorMax').textContent=max;
+    document.getElementById('sensorMaxCh').textContent='CH '+maxCh;
+    document.getElementById('sensorMin').textContent=min;
+    document.getElementById('sensorMinCh').textContent='CH '+minCh;
+    document.getElementById('sensorAvg').textContent=Math.round(sum/s.channels);
+    document.getElementById('sensorRange').textContent=max-min;
+    document.getElementById('sensorCount').textContent=s.channels;
+    document.getElementById('sensorPeriod').textContent=s.scanIntervalMs;
+    var a=parseInt(document.getElementById('historyChannelA').value||0);
+    var b=parseInt(document.getElementById('historyChannelB').value||Math.min(1,s.channels-1));
+    document.getElementById('legendA').textContent='CH '+a;
+    document.getElementById('legendB').textContent='CH '+b;
+    if(addHistory&&!sensorHistoryPaused){
+      sensorHistoryA.push(s.sensors[a]||0);sensorHistoryB.push(s.sensors[b]||0);
+      if(sensorHistoryA.length>sensorHistoryLimit)sensorHistoryA.shift();
+      if(sensorHistoryB.length>sensorHistoryLimit)sensorHistoryB.shift();
+    }
+    drawSensorProfile(s.sensors,s.channels);drawSensorHistory();
   }
   function pollState(){
     api('/api/state').then(function(s){
@@ -424,16 +559,14 @@ static const char INDEX_HTML[] PROGMEM = R"RMPHTML(
       document.getElementById('motor2State').textContent=s.motor2;
       document.getElementById('scanRate').textContent=s.scanIntervalMs+' ms';
       if(!cfg||cfg.muxChannels!==s.channels){cfg=cfg||{};cfg.muxChannels=s.channels;buildSensors(s.channels)}
-      for(var i=0;i<s.channels;i++){
-        document.getElementById('sv'+i).textContent=s.sensors[i];
-        document.getElementById('sb'+i).style.width=Math.min(100,s.sensors[i]*100/4095)+'%';
-      }
+      updateSensorDashboard(s,true);
     }).catch(showOffline);
   }
   function showOffline(){
     document.getElementById('connection').textContent='Sin respuesta';
     document.querySelector('.dot').style.background='var(--danger)';
   }
+  window.addEventListener('resize',function(){if(lastSensorState)updateSensorDashboard(lastSensorState,false)});
   loadConfig();pollState();stateTimer=setInterval(pollState,180);
 </script>
 </body>

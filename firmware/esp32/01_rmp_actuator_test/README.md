@@ -52,7 +52,10 @@ Los botones de movimiento son momentáneos: el motor funciona mientras se mantie
 
 - Lectura simultánea de hasta 16 canales.
 - Valor ADC de 12 bits, entre 0 y 4095.
-- Barras de nivel actualizadas en tiempo real.
+- Métricas de máximo, mínimo, promedio y rango.
+- Perfil instantáneo de todos los canales mediante un gráfico de barras.
+- Historial temporal de dos canales seleccionables.
+- Controles para pausar, reanudar y limpiar el historial.
 
 ## Modos de motor
 
