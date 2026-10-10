@@ -30,8 +30,10 @@
 // Red del banco de pruebas
 // ---------------------------------------------------------------------------
 
-static const char *AP_SSID = "RMP_TEST";
-static const char *AP_PASSWORD = "RMP2026";
+static const char AP_SSID[] = "RMP_TEST";
+static const char AP_PASSWORD[] = "RMP2026!";
+static_assert(sizeof(AP_PASSWORD) - 1 >= 8 && sizeof(AP_PASSWORD) - 1 <= 63,
+              "La clave Wi-Fi debe tener entre 8 y 63 caracteres.");
 static const uint16_t PWM_FREQUENCY = 20000;
 static const uint8_t PWM_RESOLUTION = 8;
 static const uint32_t MOTOR_TIMEOUT_MS = 1500;
@@ -1135,11 +1137,18 @@ void setup() {
   }
 
   WiFi.mode(WIFI_AP);
-  WiFi.softAP(AP_SSID, AP_PASSWORD);
-  Serial.print("Red: ");
-  Serial.println(AP_SSID);
-  Serial.print("Panel: http://");
-  Serial.println(WiFi.softAPIP());
+  bool accessPointReady = WiFi.softAP(AP_SSID, AP_PASSWORD);
+  if (accessPointReady) {
+    Serial.print("Red Wi-Fi: ");
+    Serial.println(AP_SSID);
+    Serial.print("Clave: ");
+    Serial.println(AP_PASSWORD);
+    Serial.print("Panel: http://");
+    Serial.println(WiFi.softAPIP());
+  } else {
+    Serial.println("ERROR: no se pudo crear el punto de acceso Wi-Fi.");
+    Serial.println("Verifica que el SSID no este vacio y que la clave tenga entre 8 y 63 caracteres.");
+  }
 
   setupRoutes();
   server.begin();

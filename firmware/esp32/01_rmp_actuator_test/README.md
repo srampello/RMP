@@ -83,7 +83,7 @@ En un TB6612FNG se debe colocar el pin STBY en el campo ENABLE / STBY y mantener
 4. Conectarse a la red:
 
    - **SSID:** RMP_TEST
-   - **Clave:** RMP2026
+   - **Clave:** RMP2026!
 
 5. Abrir http://192.168.4.1.
 6. Completar todos los GPIO en la primera pestaña.
