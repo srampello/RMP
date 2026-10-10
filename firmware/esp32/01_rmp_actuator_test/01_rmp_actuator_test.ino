@@ -344,13 +344,13 @@ static const char INDEX_HTML[] PROGMEM = R"RMPHTML(
 
   <section id="sensors" class="page">
     <div class="hero">
-      <div><h2>Monitor de sensores MUX</h2><p class="sub">Lectura normalizada de 0 a 1000, clasificación blanco/negro e historial en tiempo real.</p></div>
+      <div><h2>Mapa de la barra de sensores</h2><p class="sub">Los 16 canales representan la posición física: 0 es negro y 1000 es blanco.</p></div>
       <div><span id="scanRate" class="pill">-- ms</span></div>
     </div>
 
     <div class="dashboard-metrics">
-      <div class="metric"><small>Máximo</small><strong id="sensorMax">0</strong><em id="sensorMaxCh">CH --</em></div>
-      <div class="metric"><small>Mínimo</small><strong id="sensorMin">0</strong><em id="sensorMinCh">CH --</em></div>
+      <div class="metric"><small>Mayor blanco</small><strong id="sensorMax">0</strong><em id="sensorMaxCh">S--</em></div>
+      <div class="metric"><small>Menor blanco</small><strong id="sensorMin">0</strong><em id="sensorMinCh">S--</em></div>
       <div class="metric"><small>Promedio</small><strong id="sensorAvg">0</strong><em>ESCALA 0–1000</em></div>
       <div class="metric"><small>Rango</small><strong id="sensorRange">0</strong><em>MAX − MIN</em></div>
       <div class="metric"><small>Canales</small><strong id="sensorCount">0</strong><em>ACTIVOS</em></div>
@@ -359,10 +359,11 @@ static const char INDEX_HTML[] PROGMEM = R"RMPHTML(
 
     <article class="card wide chart-card">
       <div class="chart-head">
-        <div><h3>Perfil instantáneo</h3><p class="sub">Cada barra muestra el valor 0–1000, el ADC crudo y la superficie detectada.</p></div>
+        <div><h3>Posición de la línea blanca</h3><p class="sub">Cuanto más blanco detecta un sensor, más alta aparece su barra.</p></div>
         <div class="sensor-tools">
           <label>Umbral blanco/negro<input id="sensorThreshold" type="number" min="0" max="1000" value="500" oninput="setSensorView()"></label>
-          <label>Lectura de negro<select id="sensorPolarity" onchange="setSensorView()"><option value="high">Valor alto</option><option value="low">Valor bajo</option></select></label>
+          <label>Respuesta sobre blanco<select id="sensorWhitePolarity" onchange="setSensorView()"><option value="low">ADC bajo</option><option value="high">ADC alto</option></select></label>
+          <label>Orden físico<select id="sensorOrder" onchange="setSensorView()"><option value="normal">S0 a la izquierda</option><option value="reverse">S0 a la derecha</option></select></label>
           <span class="pill">Escala 0–1000</span>
         </div>
       </div>
@@ -391,7 +392,8 @@ static const char INDEX_HTML[] PROGMEM = R"RMPHTML(
   var activePage='config', holdTimer=null, stateTimer=null, cfg=null;
   var sensorHistoryA=[],sensorHistoryB=[],sensorHistoryLimit=100,sensorHistoryPaused=false,lastSensorState=null;
   var sensorThreshold=Math.max(0,Math.min(1000,parseInt(localStorage.getItem('rmpSensorThreshold')||'500')));
-  var sensorBlackHigh=localStorage.getItem('rmpSensorPolarity')!=='low';
+  var sensorWhiteHigh=localStorage.getItem('rmpSensorWhitePolarity')==='high';
+  var sensorS0Left=localStorage.getItem('rmpSensorOrder')!=='reverse';
   var fields=['muxS0','muxS1','muxS2','muxS3','muxSig','muxEnable','led','button',
     'motor1A','motor1B','motor1Pwm','motor2A','motor2B','motor2Pwm','motorEnable',
     'motorMode','buttonPull','muxChannels','adcSamples','scanIntervalMs'];
@@ -475,13 +477,19 @@ static const char INDEX_HTML[] PROGMEM = R"RMPHTML(
   function normalizeSensor(raw){
     return Math.round(Math.max(0,Math.min(4095,raw))*1000/4095);
   }
+  function sensorWhiteLevel(raw){
+    var adcLevel=normalizeSensor(raw);
+    return sensorWhiteHigh?adcLevel:1000-adcLevel;
+  }
   function setSensorView(){
     var input=document.getElementById('sensorThreshold');
     sensorThreshold=Math.max(0,Math.min(1000,parseInt(input.value||500)));
     input.value=sensorThreshold;
-    sensorBlackHigh=document.getElementById('sensorPolarity').value==='high';
+    sensorWhiteHigh=document.getElementById('sensorWhitePolarity').value==='high';
+    sensorS0Left=document.getElementById('sensorOrder').value==='normal';
     localStorage.setItem('rmpSensorThreshold',sensorThreshold);
-    localStorage.setItem('rmpSensorPolarity',sensorBlackHigh?'high':'low');
+    localStorage.setItem('rmpSensorWhitePolarity',sensorWhiteHigh?'high':'low');
+    localStorage.setItem('rmpSensorOrder',sensorS0Left?'normal':'reverse');
     if(lastSensorState)updateSensorDashboard(lastSensorState,false);
   }
   function clearSensorHistory(){
@@ -516,7 +524,7 @@ static const char INDEX_HTML[] PROGMEM = R"RMPHTML(
   }
   function drawSensorProfile(values,rawValues,n){
     if(activePage!=='sensors')return;
-    var p=prepareCanvas('profileChart'),ctx=p.ctx,w=p.w,h=p.h,left=46,right=12,top=25,bottom=52;
+    var p=prepareCanvas('profileChart'),ctx=p.ctx,w=p.w,h=p.h,left=46,right=12,top=38,bottom=52;
     drawChartGrid(ctx,w,h,left,top,right,bottom);
     var plotW=w-left-right,plotH=h-top-bottom,slot=plotW/n,barW=Math.max(5,slot*.62);
     var gradient=ctx.createLinearGradient(0,top,0,top+plotH);
@@ -526,15 +534,21 @@ static const char INDEX_HTML[] PROGMEM = R"RMPHTML(
     var thresholdY=top+plotH*(1-sensorThreshold/1000);
     ctx.save();ctx.setLineDash([7,5]);ctx.strokeStyle='#f59e0b';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(left,thresholdY);ctx.lineTo(w-right,thresholdY);ctx.stroke();ctx.restore();
     ctx.fillStyle='#f59e0b';ctx.textAlign='left';ctx.textBaseline='bottom';ctx.font='bold 10px Arial';ctx.fillText('UMBRAL '+sensorThreshold,left+5,thresholdY-3);
+    var centerX=left+plotW/2;
+    ctx.save();ctx.setLineDash([4,5]);ctx.strokeStyle='#7c3aed';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(centerX,top);ctx.lineTo(centerX,top+plotH);ctx.stroke();ctx.restore();
+    ctx.fillStyle='#8f8998';ctx.textBaseline='bottom';ctx.font='bold 10px Arial';ctx.textAlign='left';ctx.fillText('← IZQUIERDA',left,top-12);
+    ctx.textAlign='right';ctx.fillText('DERECHA →',w-right,top-12);
+    ctx.textAlign='center';ctx.fillStyle='#a855f7';ctx.fillText('CENTRO',centerX,top-12);
     ctx.textAlign='center';ctx.textBaseline='top';ctx.font='bold 10px Arial';
-    for(var i=0;i<n;i++){
-      var value=values[i]||0,isBlack=sensorBlackHigh?value>=sensorThreshold:value<=sensorThreshold;
-      var barH=plotH*value/1000,x=left+slot*i+(slot-barW)/2,y=top+plotH-barH,cx=left+slot*i+slot/2;
-      ctx.fillStyle=isBlack?gradient:whiteGradient;ctx.fillRect(x,y,barW,barH);
+    for(var position=0;position<n;position++){
+      var channel=sensorS0Left?position:n-1-position;
+      var value=values[channel]||0,isWhite=value>=sensorThreshold;
+      var barH=plotH*value/1000,x=left+slot*position+(slot-barW)/2,y=top+plotH-barH,cx=left+slot*position+slot/2;
+      ctx.fillStyle=isWhite?whiteGradient:gradient;ctx.fillRect(x,y,barW,barH);
       ctx.fillStyle='#f8f7fb';ctx.textBaseline='bottom';ctx.fillText(value,cx,Math.max(top+11,y-4));
-      ctx.textBaseline='top';ctx.fillStyle=isBlack?'#c084fc':'#f8f7fb';ctx.fillText('S'+i,cx,top+plotH+7);
-      ctx.fillStyle='#8f8998';ctx.font='9px Arial';ctx.fillText('ADC '+(rawValues[i]||0),cx,top+plotH+22);
-      ctx.fillStyle=isBlack?'#c084fc':'#d8d4de';ctx.font='bold 8px Arial';ctx.fillText(isBlack?'NEGRO':'BLANCO',cx,top+plotH+36);
+      ctx.textBaseline='top';ctx.fillStyle=isWhite?'#f8f7fb':'#c084fc';ctx.fillText('S'+channel,cx,top+plotH+7);
+      ctx.fillStyle='#8f8998';ctx.font='9px Arial';ctx.fillText('ADC '+(rawValues[channel]||0),cx,top+plotH+22);
+      ctx.fillStyle=isWhite?'#f8f7fb':'#c084fc';ctx.font='bold 8px Arial';ctx.fillText(isWhite?'BLANCO':'NEGRO',cx,top+plotH+36);
       ctx.font='bold 10px Arial';
     }
   }
@@ -559,13 +573,13 @@ static const char INDEX_HTML[] PROGMEM = R"RMPHTML(
     if(!s.channels)return;
     var normalized=[],min=1000,max=0,minCh=0,maxCh=0,sum=0;
     for(var i=0;i<s.channels;i++){
-      var v=normalizeSensor(s.sensors[i]);normalized.push(v);sum+=v;
+      var v=sensorWhiteLevel(s.sensors[i]);normalized.push(v);sum+=v;
       if(v<min){min=v;minCh=i}if(v>max){max=v;maxCh=i}
     }
     document.getElementById('sensorMax').textContent=max;
-    document.getElementById('sensorMaxCh').textContent='CH '+maxCh;
+    document.getElementById('sensorMaxCh').textContent='S'+maxCh;
     document.getElementById('sensorMin').textContent=min;
-    document.getElementById('sensorMinCh').textContent='CH '+minCh;
+    document.getElementById('sensorMinCh').textContent='S'+minCh;
     document.getElementById('sensorAvg').textContent=Math.round(sum/s.channels);
     document.getElementById('sensorRange').textContent=max-min;
     document.getElementById('sensorCount').textContent=s.channels;
@@ -601,7 +615,8 @@ static const char INDEX_HTML[] PROGMEM = R"RMPHTML(
   }
   window.addEventListener('resize',function(){if(lastSensorState)updateSensorDashboard(lastSensorState,false)});
   document.getElementById('sensorThreshold').value=sensorThreshold;
-  document.getElementById('sensorPolarity').value=sensorBlackHigh?'high':'low';
+  document.getElementById('sensorWhitePolarity').value=sensorWhiteHigh?'high':'low';
+  document.getElementById('sensorOrder').value=sensorS0Left?'normal':'reverse';
   loadConfig();pollState();stateTimer=setInterval(pollState,180);
 </script>
 </body>

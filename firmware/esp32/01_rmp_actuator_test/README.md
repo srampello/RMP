@@ -52,16 +52,18 @@ Los botones de movimiento son momentáneos: el motor funciona mientras se mantie
 
 - Lectura simultánea de hasta 16 canales.
 - Conservación del valor ADC crudo de 12 bits, entre 0 y 4095.
-- Conversión visual lineal de cada lectura al rango 0–1000.
+- Conversión de cada lectura a un nivel de blanco entre 0 y 1000: `0 = negro` y `1000 = blanco`.
 - Valor normalizado, ADC crudo y clasificación BLANCO/NEGRO para cada sensor.
 - Umbral de separación blanco/negro configurable entre 0 y 1000.
-- Polaridad configurable: el negro puede corresponder a una lectura alta o baja.
+- Polaridad configurable: se indica si el blanco produce un ADC alto o bajo.
+- Orden físico configurable: S0 puede mostrarse a la izquierda o a la derecha.
+- Marcadores de izquierda, centro y derecha para localizar la línea sobre la barra.
 - Métricas de máximo, mínimo, promedio y rango sobre la escala 0–1000.
 - Perfil instantáneo de todos los canales mediante un gráfico de barras con línea de umbral.
 - Historial temporal normalizado de dos canales seleccionables.
 - Controles para pausar, reanudar y limpiar el historial.
 
-La conversión usada por el monitor es `valor = ADC × 1000 / 4095`. El umbral y la polaridad se guardan en el navegador desde el que se abre la interfaz; no modifican la lectura ADC original enviada por el ESP32.
+Si el blanco produce un ADC alto, el monitor usa `blanco = ADC × 1000 / 4095`. Si produce un ADC bajo, invierte el resultado con `blanco = 1000 - (ADC × 1000 / 4095)`. El umbral, la polaridad y el orden físico se guardan en el navegador; no modifican la lectura ADC original enviada por el ESP32.
 
 ## Modos de motor
 
