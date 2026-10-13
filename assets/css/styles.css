@@ -40,7 +40,7 @@ button { color: inherit; font: inherit; }
 }
 .site-header.scrolled { background: rgba(8, 7, 11, .86); backdrop-filter: blur(18px); border-color: var(--line); }
 .brand { display: inline-flex; align-items: center; gap: 12px; font-family: "Space Grotesk", sans-serif; letter-spacing: -.03em; }
-.brand img { width: 42px; height: 42px; object-fit: cover; border-radius: 50%; }
+.brand img { width: 42px; height: 42px; object-fit: contain; }
 .brand span { font-weight: 700; font-size: 18px; }
 .brand b { color: var(--violet-bright); font-weight: 500; }
 .nav { display: flex; align-items: center; gap: 34px; font-size: 13px; font-weight: 600; }
@@ -86,7 +86,7 @@ h1 em, .closing h2 em { color: var(--violet-bright); font-style: normal; }
 .manifesto { display: grid; grid-template-columns: 220px 1fr; gap: 5vw; }
 .manifesto-content { display: grid; grid-template-columns: minmax(220px, .65fr) 1.35fr; gap: 7vw; align-items: center; }
 .manifesto-mark { aspect-ratio: 1; border: 1px solid var(--line); border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle, rgba(139,92,246,.16), transparent 68%); }
-.manifesto-mark img { width: 66%; border-radius: 50%; }
+.manifesto-mark img { width: 66%; }
 .manifesto-copy h2, .section-head h2, .competition h2, .resources h2 { font-size: clamp(42px, 5vw, 78px); line-height: .98; letter-spacing: -.055em; }
 .manifesto-copy p { color: #d2ced7; font-size: clamp(17px, 1.45vw, 22px); line-height: 1.68; max-width: 760px; }
 .manifesto-copy .muted { color: #8f8996; font-size: 15px; }
@@ -146,7 +146,7 @@ h1 em, .closing h2 em { color: var(--violet-bright); font-style: normal; }
 .text-link { display: inline-flex; gap: 14px; align-items: center; padding-bottom: 7px; border-bottom: 1px solid var(--violet); color: #d7c9ff; font-size: 12px; font-weight: 700; }
 .identity-panel { border: 1px solid var(--line); display: grid; grid-template-columns: 1fr; background: #0c0a0f; }
 .identity-logo { min-height: 330px; display: grid; place-items: center; padding: 55px; border-bottom: 1px solid var(--line); background: radial-gradient(circle, rgba(51,207,255,.12), transparent 62%); }
-.identity-logo img { width: 210px; border-radius: 12px; }
+.identity-logo img { width: 210px; max-height: 240px; object-fit: contain; }
 .flag-wrap { display: grid; grid-template-columns: 130px 1fr; align-items: center; gap: 28px; padding: 28px; }
 .flag-wrap img { width: 130px; aspect-ratio: 8 / 5; object-fit: cover; }
 .flag-wrap span { color: #8e8995; line-height: 1.6; font-size: 12px; text-transform: uppercase; letter-spacing: .1em; }
@@ -163,7 +163,7 @@ h1 em, .closing h2 em { color: var(--violet-bright); font-style: normal; }
 
 .closing { position: relative; min-height: 740px; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border-top: 1px solid var(--line); background: radial-gradient(circle at 50% 55%, rgba(95,54,190,.27), transparent 37%); }
 .closing-orbit { position: absolute; width: min(70vw, 850px); aspect-ratio: 1; border: 1px solid rgba(255,255,255,.09); border-radius: 50%; box-shadow: 0 0 0 90px rgba(255,255,255,.012), 0 0 0 180px rgba(255,255,255,.008); }
-.closing-logo { position: relative; width: 84px; border-radius: 50%; margin-bottom: 28px; }
+.closing-logo { position: relative; width: 84px; margin-bottom: 28px; }
 .closing h2 { position: relative; font-size: clamp(56px, 7vw, 112px); line-height: .9; letter-spacing: -.07em; }
 .closing .button { position: relative; margin-top: 42px; }
 
