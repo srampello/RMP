@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08070b">
+  <meta name="description" content="RMP Robotics: robots de competición desarrollados en Argentina.">
+  <title>RMP Robotics — Robots de competición</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+
+  <header class="site-header" data-header>
+    <a class="brand" href="#inicio" aria-label="RMP Robotics, inicio">
+      <img src="assets/images/rmp-logo.png" alt="">
+      <span>RMP <b>Robotics</b></span>
+    </a>
+
+    <button class="menu-button" type="button" aria-label="Abrir menú" aria-expanded="false" data-menu-button>
+      <span></span><span></span>
+    </button>
+
+    <nav class="nav" aria-label="Navegación principal" data-nav>
+      <a href="#equipo">Equipo</a>
+      <a href="#robots">Robots</a>
+      <a href="#recursos">Recursos</a>
+      <a class="nav-cta" href="https://github.com/srampello/RMP" target="_blank" rel="noreferrer">GitHub <span>↗</span></a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-copy reveal">
+        <p class="eyebrow"><span></span> Robótica de competición · Argentina</p>
+        <h1>Ideas que<br><em>se mueven.</em></h1>
+        <p class="hero-lead">Diseñamos, construimos y programamos robots para llevarlos del banco de pruebas a la pista.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#robots">Conocer los robots <span>↓</span></a>
+          <a class="button button-ghost" href="#recursos">Ver recursos</a>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal" aria-label="Robot Deimonyag">
+        <div class="orb"></div>
+        <span class="visual-index">RMP / 01</span>
+        <img src="https://raw.githubusercontent.com/srampello/RMP_Deimonyag/master/images/deimonyag.png" alt="Deimonyag, robot seguidor de línea de RMP Robotics">
+        <div class="visual-caption">
+          <span>Proyecto destacado</span>
+          <strong>DEIMONYAG</strong>
+        </div>
+      </div>
+
+      <div class="hero-footer" aria-label="Datos principales">
+        <div><strong>04</strong><span>Proyectos activos</span></div>
+        <div><strong>02</strong><span>Categorías</span></div>
+        <div><strong>ARG</strong><span>Origen</span></div>
+      </div>
+    </section>
+
+    <section class="manifesto section" id="equipo">
+      <div class="section-label reveal">01 — Equipo</div>
+      <div class="manifesto-content">
+        <div class="manifesto-mark reveal">
+          <img src="assets/images/rmp-logo.png" alt="Logo de RMP Robotics">
+        </div>
+        <div class="manifesto-copy reveal">
+          <h2>Competir es nuestro laboratorio.</h2>
+          <p>RMP Robotics es un equipo argentino enfocado en desarrollar robots rápidos, precisos y confiables. Cada proyecto reúne mecánica, electrónica, firmware y muchas horas de pruebas.</p>
+          <p class="muted">Este sitio centraliza la documentación, los recursos compartidos y la evolución de cada robot.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="projects section" id="robots">
+      <div class="section-head reveal">
+        <div>
+          <div class="section-label">02 — Robots</div>
+          <h2>Nuestra flota</h2>
+        </div>
+        <p>Cada robot tiene una misión, una arquitectura y una página propia.</p>
+      </div>
+
+      <div class="category reveal">
+        <span>01</span><h3>Seguidores de línea</h3><small>Velocidad · Control · Precisión</small>
+      </div>
+
+      <article class="project project-featured reveal">
+        <div class="project-image project-image-deimonyag">
+          <img src="https://raw.githubusercontent.com/srampello/RMP_Deimonyag/master/images/deimonyag.png" alt="Robot Deimonyag">
+          <span class="project-state">En desarrollo</span>
+        </div>
+        <div class="project-body">
+          <div class="project-number">RMP — 001</div>
+          <h3>Deimonyag</h3>
+          <p>Seguidor de línea con turbina, 16 sensores y control sobre ESP32-C3. Diseñado para buscar velocidad sin perder lectura ni estabilidad.</p>
+          <ul class="specs">
+            <li><span>Control</span><strong>ESP32-C3</strong></li>
+            <li><span>Sensores</span><strong>16 × QRE1113</strong></li>
+            <li><span>Categoría</span><strong>Seguidor con turbina</strong></li>
+          </ul>
+          <div class="project-links">
+            <a href="https://srampello.github.io/RMP_Deimonyag/">Explorar proyecto <span>↗</span></a>
+            <a href="https://github.com/srampello/RMP_Deimonyag">Repositorio</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="project project-dark reveal">
+        <div class="project-body">
+          <div class="project-number">RMP — 002</div>
+          <h3>UNICUM</h3>
+          <p>Doce sensores conectados directamente, tres estrategias de carrera y una arquitectura compacta basada en ESP32 y TB6612FNG.</p>
+          <ul class="specs">
+            <li><span>Control</span><strong>ESP32 WROOM</strong></li>
+            <li><span>Sensores</span><strong>12 × QRE1113</strong></li>
+            <li><span>Categoría</span><strong>Seguidor de línea</strong></li>
+          </ul>
+          <div class="project-links">
+            <a href="https://srampello.github.io/RMP_unicum/">Explorar proyecto <span>↗</span></a>
+            <a href="https://github.com/srampello/RMP_unicum">Repositorio</a>
+          </div>
+        </div>
+        <div class="project-art unicum-art" aria-hidden="true">
+          <div class="sensor-line">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <span>12 CH / DIRECT ARRAY</span>
+        </div>
+      </article>
+
+      <div class="category reveal">
+        <span>02</span><h3>Micromouse</h3><small>Navegación · Sensado · Autonomía</small>
+      </div>
+
+      <div class="project-grid">
+        <article class="project-card reveal">
+          <div class="card-image lea-image">
+            <img src="https://raw.githubusercontent.com/srampello/RMP_Lea_Paredes/master/3d_chatgpt/Vista_previa_Turbina_LEA_PAREDES.png" alt="Diseño de turbina de LEA_PAREDES">
+          </div>
+          <div class="card-copy">
+            <span>RMP — 003</span>
+            <h3>LEA_PAREDES</h3>
+            <p>Micromouse de diseño propio con sensores infrarrojos, tracción TB6612FNG y sistema de succión.</p>
+            <a href="https://srampello.github.io/RMP_Lea_Paredes/">Ver proyecto <b>↗</b></a>
+          </div>
+        </article>
+
+        <article class="project-card reveal">
+          <div class="card-image aus-image">
+            <img src="https://raw.githubusercontent.com/srampello/AUS_KIM/master/images/AUS_KIM.png" alt="Robot AUS_KIM">
+          </div>
+          <div class="card-copy">
+            <span>RMP — 004</span>
+            <h3>AUS_KIM</h3>
+            <p>Plataforma micromouse con ESP32-S3, cuatro sensores Sharp, encoders y telemetría Wi-Fi.</p>
+            <a href="https://srampello.github.io/AUS_KIM/">Ver proyecto <b>↗</b></a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="competition section">
+      <div class="competition-copy reveal">
+        <div class="section-label">03 — Competición</div>
+        <h2>Hecho en Argentina.<br>Probado en pista.</h2>
+        <p>Participamos en la Liga Nacional de Robótica, compartiendo pista con equipos de todo el país.</p>
+        <a class="text-link" href="https://www.lnr-argentina.com.ar/" target="_blank" rel="noreferrer">Visitar sitio oficial de la LNR <span>↗</span></a>
+      </div>
+      <div class="identity-panel reveal">
+        <a class="identity-logo" href="https://www.lnr-argentina.com.ar/" target="_blank" rel="noreferrer" aria-label="Liga Nacional de Robótica">
+          <img src="assets/images/lnr-logo.png" alt="Liga Nacional de Robótica">
+        </a>
+        <div class="flag-wrap">
+          <img src="assets/images/argentina.png" alt="Bandera de Argentina">
+          <span>Buenos Aires<br><strong>Argentina</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="resources section" id="recursos">
+      <div class="section-head reveal">
+        <div>
+          <div class="section-label">04 — Open workshop</div>
+          <h2>Construir. Probar.<br>Documentar.</h2>
+        </div>
+        <p>Firmware y documentación reutilizable para acelerar nuevas ideas y diagnosticar hardware.</p>
+      </div>
+
+      <div class="resource-list reveal">
+        <a href="https://github.com/srampello/RMP/tree/master/firmware/esp32/01_rmp_actuator_test">
+          <span class="resource-number">01</span>
+          <div><strong>ESP32 Test Suite</strong><small>MUX 16CH · LED · Botón · Motores</small></div>
+          <b>↗</b>
+        </a>
+        <a href="https://github.com/srampello/RMP/blob/master/PROJECTS.md">
+          <span class="resource-number">02</span>
+          <div><strong>Índice de proyectos</strong><small>Estado, categoría y enlaces</small></div>
+          <b>↗</b>
+        </a>
+        <a href="https://github.com/srampello/RMP/tree/master/templates">
+          <span class="resource-number">03</span>
+          <div><strong>Plantillas RMP</strong><small>Estructuras y fichas técnicas</small></div>
+          <b>↗</b>
+        </a>
+      </div>
+    </section>
+
+    <section class="closing">
+      <div class="closing-orbit" aria-hidden="true"></div>
+      <img src="assets/images/rmp-logo.png" alt="Logo RMP Robotics" class="closing-logo reveal">
+      <p class="eyebrow reveal"><span></span> Próxima vuelta</p>
+      <h2 class="reveal">Siempre hay algo<br><em>por mejorar.</em></h2>
+      <a class="button button-primary reveal" href="https://github.com/srampello" target="_blank" rel="noreferrer">Seguir el desarrollo <span>↗</span></a>
+    </section>
+  </main>
+
+  <footer>
+    <a class="brand" href="#inicio">
+      <img src="assets/images/rmp-logo.png" alt="">
+      <span>RMP <b>Robotics</b></span>
+    </a>
+    <p>Robots de competición · Buenos Aires, Argentina</p>
+    <div class="footer-links">
+      <a href="https://github.com/srampello" target="_blank" rel="noreferrer">GitHub</a>
+      <a href="https://www.lnr-argentina.com.ar/" target="_blank" rel="noreferrer">LNR</a>
+      <a href="#inicio">Volver arriba ↑</a>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
