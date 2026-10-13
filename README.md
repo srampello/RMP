@@ -1,27 +1,50 @@
 # RMP Robotics
 
-Repositorio central de **RMP Robotics**: punto de entrada a todos los robots, documentación común, firmware de pruebas genérico, herramientas y plantillas reutilizables.
+Repositorio central de **RMP Robotics**. Funciona como índice de todos los robots, punto de acceso a sus repositorios y biblioteca de firmware, documentación y herramientas reutilizables.
 
-## Proyectos
+## Mapa de proyectos
 
-| Robot | Categoría | Controlador | Estado | Repositorio |
-|---|---|---|---|---|
-| **Deimonyag** | Seguidor de línea con succión | ESP32-C3 Super Mini | En desarrollo | [RMP_Deimonyag](https://github.com/srampello/RMP_Deimonyag) |
-| **AUS_KIM** | Micromouse / plataforma de pruebas | ESP32-S3 SuperMini | Pruebas y navegación | [AUS_KIM](https://github.com/srampello/AUS_KIM) |
-| **LEA_PAREDES** | Micromouse de competición | ESP32-C3 Super Mini | Diseño mecánico y electrónico | [RMP_Lea_Paredes](https://github.com/srampello/RMP_Lea_Paredes) |
+### Seguidores de línea
 
-La ficha ampliada de cada proyecto está en [PROJECTS.md](PROJECTS.md).
+| Robot | Enfoque | Controlador | Sensores | Estado | Repositorio |
+|---|---|---|---|---|---|
+| **Deimonyag** | Competición con sistema de succión | ESP32-C3 Super Mini | 12 × QRE1113GR con CD74HC4067 | Hardware, firmware Wi-Fi y telemetría en desarrollo | [RMP_Deimonyag](https://github.com/srampello/RMP_Deimonyag) |
+| **UNICUM** | Seguidor compacto sin MUX | ESP32-WROOM / ESP32S | 12 × QRE1113GR analógicos directos | Base de diseño y firmware v0.1 | [RMP_unicum](https://github.com/srampello/RMP_unicum) |
+
+### Micromouse y laberinto
+
+| Robot | Enfoque | Controlador | Sensores | Estado | Repositorio |
+|---|---|---|---|---|---|
+| **LEA_PAREDES** | Micromouse propio de competición | ESP32-C3 Super Mini | 4 pares IR | Diseño mecánico, electrónico y firmware | [RMP_Lea_Paredes](https://github.com/srampello/RMP_Lea_Paredes) |
+| **AUS_KIM** | Plataforma prestada de aprendizaje y navegación | ESP32-S3 SuperMini | 4 × Sharp GP2Y0E03 | Pruebas, PID y navegación de laberinto | [AUS_KIM](https://github.com/srampello/AUS_KIM) |
+
+La información ampliada de cada proyecto está en [PROJECTS.md](PROJECTS.md). El firmware final, los esquemáticos, el CAD y las calibraciones permanecen en el repositorio de cada robot.
+
+## Accesos destacados
+
+- [Deimonyag — repositorio](https://github.com/srampello/RMP_Deimonyag)
+- [Deimonyag — visor de hardware](https://srampello.github.io/RMP_Deimonyag/)
+- [UNICUM — repositorio](https://github.com/srampello/RMP_unicum)
+- [LEA_PAREDES — repositorio](https://github.com/srampello/RMP_Lea_Paredes)
+- [LEA_PAREDES — página del robot](https://rmp-robotics.santii-rampe.chatgpt.site/robots/lea-paredes)
+- [AUS_KIM — repositorio](https://github.com/srampello/AUS_KIM)
 
 ## Recursos compartidos
 
-- [Firmware genérico](firmware/README.md): pruebas reutilizables de motores, sensores, encoders, PWM, Wi-Fi y telemetría.
-- [Hardware](hardware/README.md): criterios comunes, referencias y módulos usados en distintos robots.
-- [Herramientas](tools/README.md): utilidades de PC, scripts y recursos de diagnóstico.
-- [Plantillas](templates/robot-project/README.md): estructura recomendada para iniciar un nuevo robot.
-- [Convenciones](docs/CONVENCIONES.md): nombres, versiones, carpetas y documentación.
-- [Arquitectura del repositorio](docs/ARQUITECTURA_REPOSITORIOS.md): qué se guarda aquí y qué permanece en cada proyecto.
+| Sección | Contenido |
+|---|---|
+| [Firmware genérico](firmware/README.md) | Pruebas reutilizables de motores, sensores, encoders, PWM, Wi-Fi y telemetría |
+| [Hardware](hardware/README.md) | Criterios comunes, referencias y módulos utilizados en varios robots |
+| [Herramientas](tools/README.md) | Scripts, utilidades de PC y recursos de diagnóstico |
+| [Plantillas](templates/robot-project/README.md) | Estructura recomendada para iniciar un robot nuevo |
+| [Convenciones](docs/CONVENCIONES.md) | Nombres, versiones, carpetas y estructura obligatoria de sketches Arduino |
+| [Arquitectura](docs/ARQUITECTURA_REPOSITORIOS.md) | Separación entre el repositorio central y cada proyecto |
 
-## Estructura
+## Firmware genérico disponible
+
+- [RMP ESP32 Universal Test Bench](firmware/esp32/01_rmp_actuator_test/): banco web configurable para probar MUX CD74HC4067, LED, botón, motores y una barra de hasta 16 sensores.
+
+## Estructura del repositorio central
 
 ```text
 RMP/
@@ -36,32 +59,22 @@ RMP/
 
 ## Criterio de organización
 
-**En RMP central**
+### En RMP central
 
-- Firmware de prueba que pueda reutilizarse en más de un robot.
-- Plantillas de proyectos, fichas técnicas y documentación.
-- Herramientas de diagnóstico y telemetría genéricas.
+- Índice y estado general de todos los robots.
+- Firmware de prueba aplicable a más de un proyecto.
+- Plantillas, fichas técnicas y convenciones.
+- Herramientas comunes de diagnóstico y telemetría.
 - Referencias de componentes y buenas prácticas compartidas.
-- Índice y estado general de todos los proyectos.
 
-**En el repositorio de cada robot**
+### En el repositorio de cada robot
 
 - Firmware final y configuración específica.
-- Pinout definitivo.
+- Pinout definitivo y calibraciones.
 - Esquemáticos, PCB, CAD, STL y BOM.
-- Telemetría y calibraciones propias.
-- Historial de pruebas y versiones del robot.
+- Telemetría, resultados de pruebas e historial de versiones.
+- Documentación técnica propia del proyecto.
 
-## Enlaces rápidos
+## Incorporación de proyectos
 
-- [Deimonyag — documentación y firmware](https://github.com/srampello/RMP_Deimonyag)
-- [Deimonyag — visor web](https://srampello.github.io/RMP_Deimonyag/)
-- [AUS_KIM — documentación y firmware](https://github.com/srampello/AUS_KIM)
-- [LEA_PAREDES — documentación, hardware y diseño 3D](https://github.com/srampello/RMP_Lea_Paredes)
-
-## Próximos pasos
-
-- Incorporar los primeros firmwares genéricos, separando controlador, driver y sensores.
-- Crear una base común de telemetría Wi-Fi para ESP32-C3 y ESP32-S3.
-- Normalizar las fichas técnicas de los tres robots.
-- Agregar nuevos proyectos sin duplicar su contenido técnico.
+Todo robot nuevo debe crearse en un repositorio independiente, completar su documentación y luego añadirse a [PROJECTS.md](PROJECTS.md) y a este índice. Los archivos `.ino` deben estar dentro de una carpeta con exactamente el mismo nombre del sketch.
