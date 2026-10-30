@@ -1,0 +1,123 @@
+<!--
+{
+  "id": "deimonyag",
+  "name": "DEIMONYAG",
+  "code": "RMP-001",
+  "title_suffix": "seguidor de línea con succión de RMP Robotics. Barra curva de 12 sensores, EDF27 y telemetría Wi-Fi.",
+  "kicker": "Seguidor de línea con succión",
+  "version": "Revisión de hardware 0.2",
+  "lead": "Seguidor de línea de competición con una turbina EDF que lo pega a la pista, una barra curva de 12 sensores y telemetría por Wi-Fi hacia una aplicación de PC.",
+  "repo": "https://github.com/srampello/RMP_Deimonyag",
+  "links": [["Visor de hardware", "https://srampello.github.io/RMP_Deimonyag/"]],
+  "art": {"svg": "deimonyag"},
+  "figures": [["Sensores QRE1113GR", "12", ""], ["Radio de la barra", "95", "mm"], ["Motores JSumo ProFast", "3600", "rpm"], ["Batería LiPo", "3S", "450 mAh"]],
+  "side": {"img": "deimonyag.webp", "alt": "Emblema de Deimonyag: un demonio con casco y turbina sobre el nombre en dorado", "caption": "Deimonyag, «the demon on the track»", "contain": true}
+}
+-->
+<section id="introduccion">
+  <h2>Introducción</h2>
+  <p>Deimonyag es el seguidor de línea principal de RMP. La idea es ganar velocidad en las curvas sin agregar peso: una turbina <strong>EDF27</strong> genera succión bajo el chasis y aumenta la fuerza contra la pista, así el robot puede doblar más rápido sin derrapar.</p>
+  <p>La revisión 0.2 (12 de septiembre de 2026) fijó la arquitectura de alimentación y los componentes principales. El firmware Wi-Fi y la aplicación de telemetría ya se comunican con el robot real.</p>
+</section>
+
+<section id="mecanica">
+  <h2>Mecánica</h2>
+  <h3 id="barra">Barra de sensores</h3>
+  <p>Los 12 sensores no van en línea recta: siguen un arco de <strong>95 mm de radio</strong> con <strong>4,8°</strong> entre cada uno, orientados en forma radial. Los sensores Q6 y Q7 quedan simétricos respecto del eje del robot.</p>
+  <h3 id="succion">Succión</h3>
+  <p>Un EDF27 brushless alimentado directo desde la LiPo 3S a través de un ESC, controlado con la señal de GPIO10. La potencia se maneja de 0 a 100 desde la aplicación de PC en modo banco.</p>
+</section>
+
+<section id="hardware">
+  <h2>Hardware</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Área</th><th>Componente</th></tr></thead>
+    <tbody>
+      <tr><td>Controlador</td><td>ESP32-C3 Super Mini</td></tr>
+      <tr><td>Sensores</td><td>12 × QRE1113GR con multiplexor CD74HC4067</td></tr>
+      <tr><td>Tracción</td><td>2 × JSumo ProFast 12 V 3600 rpm</td></tr>
+      <tr><td>Drivers</td><td>2 × Infineon IFX9201SG</td></tr>
+      <tr><td>Succión</td><td>EDF27 brushless con ESC</td></tr>
+      <tr><td>Energía</td><td>LiPo 3S 450 mAh 75C con XT30 y Matek MICRO BEC a 5 V</td></tr>
+      <tr><td>Interfaz</td><td>MicroStart, botón de estrategia y LED indicador</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="alimentacion">Alimentación</h3>
+  <ul>
+    <li><strong>VBAT 3S</strong>: drivers de tracción y ESC del EDF.</li>
+    <li><strong>5 V</strong> del Matek MICRO BEC (6–30 V): ESP32-C3 y LEDs infrarrojos de la barra. Reemplazó al Mini360 en la revisión 0.2.</li>
+    <li><strong>3,3 V</strong> del ESP32-C3: multiplexor y pull-ups de los fototransistores.</li>
+    <li><strong>GND</strong> común.</li>
+  </ul>
+
+  <h3 id="sensores">Sensores</h3>
+  <p>Cada QRE1113GR lleva el LED a 5 V con 150 Ω y el fototransistor con pull-up de 10 kΩ a 3,3 V. Los canales Y0 a Y11 del CD74HC4067 leen los sensores de izquierda a derecha; Y12 a Y15 van a GND. La salida común del multiplexor entra al ADC por GPIO4.</p>
+
+  <h3 id="traccion">Tracción</h3>
+  <p>Dos IFX9201SG, uno por motor, controlados por PWM y dirección. VS va a la batería 3S, VSO a 3,3 V, y las líneas SPI (DIS, SCK, CSN, SI) a GND porque no se usa la configuración por SPI.</p>
+</section>
+
+<section id="pinout">
+  <h2>Pinout</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th class="num">GPIO</th><th>Función</th></tr></thead>
+    <tbody>
+      <tr><td class="num">0</td><td>MUX S3</td></tr>
+      <tr><td class="num">1</td><td>MUX S2</td></tr>
+      <tr><td class="num">2</td><td>MUX S1</td></tr>
+      <tr><td class="num">3</td><td>MUX S0</td></tr>
+      <tr><td class="num">4</td><td>MUX SIG, entrada ADC</td></tr>
+      <tr><td class="num">5</td><td>Motor 1, PWM</td></tr>
+      <tr><td class="num">6</td><td>Motor 1, dirección</td></tr>
+      <tr><td class="num">7</td><td>Motor 2, PWM</td></tr>
+      <tr><td class="num">8</td><td>Motor 2, dirección</td></tr>
+      <tr><td class="num">9</td><td>LED indicador</td></tr>
+      <tr><td class="num">10</td><td>Señal del ESC del EDF27</td></tr>
+      <tr><td class="num">20</td><td>MicroStart</td></tr>
+      <tr><td class="num">21</td><td>Botón de estrategia</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="software">
+  <h2>Software</h2>
+  <h3 id="firmware">Firmware Wi-Fi</h3>
+  <p>El ESP32-C3 crea su propio punto de acceso y expone un WebSocket en <code>ws://192.168.4.1:81</code>. Los mensajes son JSON y tienen dos modos:</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Modo</th><th>Para qué sirve</th><th>Qué puede hacer la PC</th></tr></thead>
+    <tbody>
+      <tr><td><code>TEST</code></td><td>Banco de pruebas en el taller</td><td>Mover cada motor (−255 a 255), el EDF (0 a 100) y leer los 12 sensores</td></tr>
+      <tr><td><code>TELEMETRY</code></td><td>Carrera y análisis</td><td>Solo leer: sensores, error, P, D, PID, PWM, EDF y tiempo de loop</td></tr>
+    </tbody>
+  </table></div>
+  <p>En modo banco hay un watchdog: si el robot no recibe nada de la PC durante 500 ms, apaga los actuadores. En telemetría el robot rechaza cualquier orden de movimiento, así que perder el Wi-Fi no cambia su comportamiento en pista.</p>
+  <pre>{"type":"control","motor_left":120}
+{"type":"control","edf":65}
+{"type":"stop"}</pre>
+
+  <h3 id="app">Aplicación de PC</h3>
+  <p>Una aplicación en Python con dos pestañas, Pruebas y Telemetría, que guarda cada carrera en CSV para analizarla después. Tiene un simulador para desarrollar sin el robot y se empaqueta como ejecutable de Windows con GitHub Actions.</p>
+</section>
+
+<section id="estado">
+  <h2>Estado y próximos pasos</h2>
+  <ol class="steps">
+    <li class="done"><span><strong>Revisión 0.1.</strong> Primera arquitectura electrónica y mapa de GPIO.</span></li>
+    <li class="done"><span><strong>Revisión 0.2.</strong> Matek MICRO BEC, alimentación 3S / 5 V / 3,3 V, barra curva definida y esquemáticos exportados.</span></li>
+    <li class="done"><span>Firmware Wi-Fi y aplicación de telemetría conectados al ESP32-C3 real.</span></li>
+    <li><span>Fabricar y montar la placa principal y la barra de sensores.</span></li>
+    <li><span>Calibrar sensores y ajustar el PID en pista con la telemetría.</span></li>
+  </ol>
+</section>
+
+<section id="archivos">
+  <h2>Archivos</h2>
+  <div class="files">
+    <a href="https://srampello.github.io/RMP_Deimonyag/">Visor interactivo de esquemáticos <span>Web</span></a>
+    <a href="https://github.com/srampello/RMP_Deimonyag/blob/master/docs/CONEXIONES.md">Conexiones <span>Markdown</span></a>
+    <a href="https://github.com/srampello/RMP_Deimonyag/blob/master/docs/PROTOCOL_WIFI.md">Protocolo Wi-Fi <span>Markdown</span></a>
+    <a href="https://github.com/srampello/RMP_Deimonyag/tree/master/telemetry">Aplicación de telemetría <span>Python</span></a>
+    <a href="https://github.com/srampello/RMP_Deimonyag/blob/master/CHANGELOG.md">Historial de cambios <span>Markdown</span></a>
+  </div>
+</section>

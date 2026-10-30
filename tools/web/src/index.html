@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="RMP Robotics: seguidores de línea y micromouse de competición, diseñados y programados en Buenos Aires.">
+  <title>RMP Robotics</title>
+  <link rel="icon" href="assets/images/rmp-logo.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <a class="skip" href="#robots">Ir a los robots</a>
+
+  <header class="home-top wrap">
+    <img src="assets/images/rmp-logo.webp" alt="" width="84" height="84">
+    <h1>RMP Robotics</h1>
+    <p>Seguidores de línea y micromouse para la Liga Nacional de Robótica, diseñados y programados en Buenos Aires.</p>
+  </header>
+
+  <main class="wrap">
+    <section id="robots" aria-labelledby="robots-title">
+      <div class="rule-head">
+        <h2 id="robots-title" style="font-size:inherit">Robots</h2>
+        <span>4 proyectos</span>
+      </div>
+
+      <div class="fleet">
+        <a class="card" href="robots/deimonyag/">
+          <div class="card-head">
+            <div><h2>DEIMONYAG</h2><small>RMP-001</small></div>
+            <span class="tag">Seguidor de línea</span>
+          </div>
+          <div class="card-art">{{svg:deimonyag}}</div>
+          <dl class="card-meta">
+            <dt>Control</dt><dd>ESP32-C3</dd>
+            <dt>Sensores</dt><dd>12 × QRE1113GR</dd>
+            <dt>Etapa</dt><dd><span class="stages" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></dd>
+            <dd class="stage-label">Firmware y telemetría Wi-Fi</dd>
+          </dl>
+          <span class="card-cta">Ver informe técnico <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span>
+        </a>
+
+        <a class="card" href="robots/unicum/">
+          <div class="card-head">
+            <div><h2>UNICUM</h2><small>RMP-002</small></div>
+            <span class="tag">Seguidor de línea</span>
+          </div>
+          <div class="card-art">{{svg:unicum}}</div>
+          <dl class="card-meta">
+            <dt>Control</dt><dd>ESP32-C3</dd>
+            <dt>Sensores</dt><dd>12 × QRE1113GR</dd>
+            <dt>Etapa</dt><dd><span class="stages" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></dd>
+            <dd class="stage-label">Firmware v0.2, PCB sin rutear</dd>
+          </dl>
+          <span class="card-cta">Ver informe técnico <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span>
+        </a>
+
+        <a class="card" href="robots/lea-paredes/">
+          <div class="card-head">
+            <div><h2>LEA_PAREDES</h2><small>RMP-003</small></div>
+            <span class="tag">Micromouse</span>
+          </div>
+          <div class="card-art">{{svg:lea-paredes}}</div>
+          <dl class="card-meta">
+            <dt>Control</dt><dd>ESP32-C3</dd>
+            <dt>Sensores</dt><dd>4 pares IR</dd>
+            <dt>Etapa</dt><dd><span class="stages" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span></dd>
+            <dd class="stage-label">Mecánica, PCB y navegación inicial</dd>
+          </dl>
+          <span class="card-cta">Ver informe técnico <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span>
+        </a>
+
+        <a class="card" href="robots/aus-kim/">
+          <div class="card-head">
+            <div><h2>AUS_KIM</h2><small>RMP-004</small></div>
+            <span class="tag">Micromouse</span>
+          </div>
+          <div class="card-art">{{svg:aus-kim}}</div>
+          <dl class="card-meta">
+            <dt>Control</dt><dd>ESP32-C3 (V2)</dd>
+            <dt>Sensores</dt><dd>3 × Sharp + piso</dd>
+            <dt>Etapa</dt><dd><span class="stages" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></dd>
+            <dd class="stage-label">V1 probada en laberinto, V2 en calibración</dd>
+          </dl>
+          <span class="card-cta">Ver informe técnico <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></span>
+        </a>
+      </div>
+
+      <div class="legend">
+        <span>Etapas:</span>
+        <ol>
+          <li>Diseño</li><li>Electrónica</li><li>Firmware</li><li>Pruebas en pista</li><li>Competencia</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="tools" aria-labelledby="tools-title">
+      <div class="rule-head">
+        <h2 id="tools-title" style="font-size:inherit">Herramientas compartidas</h2>
+        <span>Sirven para cualquier robot</span>
+      </div>
+      <div class="tool-list">
+        <a href="https://github.com/srampello/RMP/tree/master/firmware/esp32/01_rmp_actuator_test">
+          <strong>Banco de pruebas ESP32</strong>
+          <span>Prueba MUX de 16 canales, LED, botón, motores y barra de sensores desde el navegador.</span>
+        </a>
+        <a href="https://github.com/srampello/RMP/tree/master/templates">
+          <strong>Plantillas</strong>
+          <span>Estructura de repositorio y ficha técnica para empezar un robot nuevo.</span>
+        </a>
+        <a href="https://github.com/srampello/RMP/blob/master/docs/CONVENCIONES.md">
+          <strong>Convenciones</strong>
+          <span>Nombres, versiones, carpetas y estructura de sketches Arduino.</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="league" aria-label="Liga Nacional de Robótica">
+      <img src="assets/images/lnr-logo.webp" alt="Liga Nacional de Robótica" width="58" height="65">
+      <p>Competimos en la <a href="https://www.lnr-argentina.com.ar/" target="_blank" rel="noreferrer">Liga Nacional de Robótica</a> de Argentina, en las categorías seguidor de línea y laberinto.</p>
+    </section>
+  </main>
+
+  <footer class="site-foot wrap">
+    <span>RMP Robotics · Buenos Aires</span>
+    <nav aria-label="Enlaces externos">
+      <a href="https://github.com/srampello" target="_blank" rel="noreferrer">GitHub</a>
+      <a href="https://www.lnr-argentina.com.ar/" target="_blank" rel="noreferrer">LNR</a>
+    </nav>
+  </footer>
+</body>
+</html>

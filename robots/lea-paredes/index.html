@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="LEA_PAREDES: micromouse propio de RMP Robotics con ESP32-C3, cuatro pares infrarrojos y turbina de 30 mm.">
+  <title>LEA_PAREDES — RMP Robotics</title>
+  <link rel="icon" href="../../assets/images/rmp-logo.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/styles.css">
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+</head>
+<body>
+  <a class="skip" href="#informe">Ir al informe</a>
+
+  <header class="bar">
+    <a href="../../"><img src="../../assets/images/rmp-logo.webp" alt="" width="26" height="26"> Robots</a>
+    <span class="bar-title">LEA_PAREDES</span>
+    <a class="gh" href="https://github.com/srampello/RMP_Lea_Paredes" target="_blank" rel="noreferrer">Repositorio</a>
+  </header>
+
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="hero-kicker">Micromouse de competición</p>
+      <h1 style="--chars: 11">LEA_PAREDES<span class="ver">Esquemático V1</span></h1>
+      <p class="hero-lead">Nuestro micromouse de diseño propio: base impresa en 3D, PCB superior, cuatro pares infrarrojos y una turbina de 30 mm para ganar agarre en los giros.</p>
+      <div class="hero-actions">
+        <a class="btn btn-solid" href="#informe">Leer el informe</a>
+        <a class="btn" href="https://github.com/srampello/RMP_Lea_Paredes" target="_blank" rel="noreferrer">Ver en GitHub</a>
+        
+      </div>
+    </div>
+    <div class="hero-art"><div class="viewer" data-stl="[{&quot;src&quot;: &quot;../../assets/models/lea-paredes/base.stl&quot;, &quot;color&quot;: &quot;#34313d&quot;}, {&quot;src&quot;: &quot;../../assets/models/lea-paredes/base_superipor.stl&quot;, &quot;color&quot;: &quot;#8a8597&quot;}]" aria-label="Modelo 3D de la base y la pieza superior de LEA_PAREDES"><span class="viewer-msg">Cargando modelo 3D…</span></div><span class="hint">Arrastrá para girar el modelo</span></div>
+  </section>
+
+  <dl class="figures"><div class="figure"><dt>Celda del laberinto</dt><dd>18 × 18<small>cm</small></dd></div><div class="figure"><dt>Turbina centrífuga</dt><dd>30<small>mm</small></dd></div><div class="figure"><dt>Motores Pololu</dt><dd>1000<small>rpm</small></dd></div><div class="figure"><dt>Ruedas</dt><dd>26<small>mm</small></dd></div></dl>
+
+  <div class="report" id="informe">
+    <aside class="side">
+      <figure class="side-media"><img src="../../assets/images/lea-paredes.webp" alt="Render de la turbina de LEA_PAREDES: seis aspas curvas sobre un disco" class="contain" loading="lazy"><figcaption>Turbina de seis aspas, 30 × 6,3 mm</figcaption></figure>
+      <nav class="outline" aria-label="Índice del informe">
+        <p>Índice</p>
+        <ol><li><a href="#introduccion">Introducción</a></li><li><a href="#mecanica">Mecánica</a><ol><li><a href="#piezas">Piezas</a></li><li><a href="#turbina">Turbina</a></li></ol></li><li><a href="#hardware">Hardware</a><ol><li><a href="#alimentacion">Alimentación</a></li><li><a href="#sensores">Sensores infrarrojos</a></li><li><a href="#succion">Control de la turbina</a></li></ol></li><li><a href="#pinout">Pinout</a></li><li><a href="#software">Software</a><ol><li><a href="#estrategia">Estrategia inicial</a></li><li><a href="#labyrinth-control">Labyrinth Control</a></li></ol></li><li><a href="#estado">Antes de fabricar la PCB</a></li><li><a href="#archivos">Archivos</a></li></ol>
+      </nav>
+    </aside>
+
+    <article class="doc">
+<section id="introduccion">
+  <h2>Introducción</h2>
+  <p>LEA_PAREDES es el primer micromouse diseñado completo por RMP. Está pensado para celdas de <strong>18 × 18 cm</strong> y arranca con una estrategia simple: seguir la pared derecha con giros temporizados. Lo que aprendemos con <a href="../aus-kim/">AUS_KIM</a> se prueba primero allá y después se trae acá.</p>
+  <p>Por ahora los motores no tienen encoders. La navegación con mapa queda para una revisión posterior.</p>
+</section>
+
+<section id="mecanica">
+  <h2>Mecánica</h2>
+  <h3 id="piezas">Piezas</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Pieza</th><th>Archivo</th><th>Función</th></tr></thead>
+    <tbody>
+      <tr><td>Base</td><td><code>base.stl</code></td><td>Integra motores, batería y alojamiento de la turbina</td></tr>
+      <tr><td>Pieza superior</td><td><code>base_superipor.stl</code></td><td>Soporte de la PCB superior</td></tr>
+      <tr><td>Rueda</td><td><code>Rueda_Micromouse.stl</code></td><td>Llanta para ruedas de 26 mm</td></tr>
+      <tr><td>Turbina</td><td><code>turb_30mm.stl</code></td><td>Impulsor centrífugo para la succión</td></tr>
+    </tbody>
+  </table></div>
+  <p>Los originales están en Fusion 360 dentro de <code>fusion_archive/</code>.</p>
+
+  <h3 id="turbina">Turbina</h3>
+  <p>Impulsor centrífugo de <strong>30 mm de diámetro y 6,3 mm de alto</strong>, con disco posterior cerrado y seis aspas curvadas hacia atrás de 1 mm de espesor. Aspira por el centro y expulsa por los costados. Hay versiones para giro horario y antihorario, y el eje entra en un orificio ciego de 1,54 mm.</p>
+</section>
+
+<section id="hardware">
+  <h2>Hardware</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Área</th><th>Componente</th></tr></thead>
+    <tbody>
+      <tr><td>Controlador</td><td>ESP32-C3 Super Mini</td></tr>
+      <tr><td>Driver</td><td>TB6612FNG doble</td></tr>
+      <tr><td>Tracción</td><td>2 × Pololu 1000 rpm, sin encoders</td></tr>
+      <tr><td>Sensores</td><td>4 pares: emisor TSAL6100 y receptor PT334-6B</td></tr>
+      <tr><td>Succión</td><td>Motor coreless 8520 con turbina de 30 mm</td></tr>
+      <tr><td>Energía</td><td>LiHV 2S 300 mAh y Matek Micro BEC a 5 V</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="alimentacion">Alimentación</h3>
+  <ul>
+    <li><strong>VBAT</strong> (7,6 V nominal, 8,7 V cargada): VM del TB6612 y entrada del Matek.</li>
+    <li><strong>+5V_RAW</strong> del Matek: emisores infrarrojos y turbina. Un diodo SS14 lo separa del 5 V del ESP32 para no realimentar el robot al conectar USB.</li>
+    <li><strong>+3V3</strong> del ESP32: lógica, TB6612 y receptores.</li>
+    <li><strong>GND</strong> común.</li>
+  </ul>
+
+  <h3 id="sensores">Sensores infrarrojos</h3>
+  <p>Dos frontales y dos laterales. Cada TSAL6100 recibe 5 V a través de dos resistencias de 150 Ω en paralelo, y los cuatro cátodos se encienden juntos con un MOSFET AO3400A controlado desde GPIO21. Cada PT334-6B tiene el colector a 3,3 V y una resistencia de 10 kΩ del ADC a GND.</p>
+
+  <h3 id="succion">Control de la turbina</h3>
+  <p>El motor 8520 se conmuta del lado bajo con otro AO3400A, con 100 Ω de gate, pull-down de 10 kΩ y un diodo SS34 de rueda libre. Las primeras pruebas van con el PWM limitado al 70 % y rampa de arranque.</p>
+</section>
+
+<section id="pinout">
+  <h2>Pinout</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th class="num">GPIO</th><th>Red</th><th>Función</th></tr></thead>
+    <tbody>
+      <tr><td class="num">0</td><td><code>SENS_FL</code></td><td>Sensor frontal izquierdo (ADC)</td></tr>
+      <tr><td class="num">1</td><td><code>SENS_FR</code></td><td>Sensor frontal derecho (ADC)</td></tr>
+      <tr><td class="num">2</td><td><code>PWM_A</code></td><td>PWM motor izquierdo, pull-up de 10 kΩ</td></tr>
+      <tr><td class="num">3</td><td><code>SENS_L</code></td><td>Sensor lateral izquierdo (ADC)</td></tr>
+      <tr><td class="num">4</td><td><code>SENS_R</code></td><td>Sensor lateral derecho (ADC)</td></tr>
+      <tr><td class="num">5</td><td><code>AIN1</code></td><td>Dirección A1</td></tr>
+      <tr><td class="num">6</td><td><code>AIN2</code></td><td>Dirección A2</td></tr>
+      <tr><td class="num">7</td><td><code>BIN1</code></td><td>Dirección B1</td></tr>
+      <tr><td class="num">8</td><td><code>PWM_B</code></td><td>PWM motor derecho, pull-up de 10 kΩ</td></tr>
+      <tr><td class="num">9</td><td>BOOT</td><td>Pulsador de inicio</td></tr>
+      <tr><td class="num">10</td><td><code>BIN2</code></td><td>Dirección B2</td></tr>
+      <tr><td class="num">20</td><td><code>FAN_PWM</code></td><td>PWM de la turbina</td></tr>
+      <tr><td class="num">21</td><td><code>IR_EN</code></td><td>Encendido de los cuatro emisores</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="software">
+  <h2>Software</h2>
+  <h3 id="estrategia">Estrategia inicial</h3>
+  <ol class="steps">
+    <li><span>Mantener una distancia fija a la pared derecha.</span></li>
+    <li><span>Corregir la trayectoria variando la velocidad de cada motor.</span></li>
+    <li><span>Detectar la pared de enfrente con los sensores frontales.</span></li>
+    <li><span>Girar por tiempo en las primeras pruebas.</span></li>
+    <li><span>Más adelante, navegar con mapa y encoders.</span></li>
+  </ol>
+  <h3 id="labyrinth-control">Labyrinth Control</h3>
+  <p>Una aplicación de Windows en Python, sin dependencias externas, para probar los motores por Wi-Fi: velocidad de cada motor de 0 a 255, avance y giros mientras se mantiene el control, inversión de sentido sin recablear y parada automática si se corta la comunicación.</p>
+</section>
+
+<section id="estado">
+  <h2>Antes de fabricar la PCB</h2>
+  <ol class="steps">
+    <li class="done"><span>Esquemático V1 en KiCad, regenerable con <code>tools/generate_schematic.py</code>.</span></li>
+    <li class="done"><span>Huellas de ESP32-C3, TB6612FNG y Matek preparadas en versión castellated y THT.</span></li>
+    <li><span>Verificar con multímetro la polaridad del JST-PH de la batería.</span></li>
+    <li><span>Dejar abierto el puente de 9 V del Matek para que entregue 5 V.</span></li>
+    <li><span>Medir el consumo conjunto de turbina, emisores y lógica: el Matek da 1,5 A continuos.</span></li>
+    <li><span>Confirmar las huellas físicas y correr el ERC en KiCad.</span></li>
+  </ol>
+</section>
+
+<section id="archivos">
+  <h2>Archivos</h2>
+  <div class="files">
+    <a href="https://github.com/srampello/RMP_Lea_Paredes/blob/master/hardware/kicad/LEA_PAREDES/ESQUEMATICO_V1.md">Esquemático V1 <span>Markdown</span></a>
+    <a href="https://github.com/srampello/RMP_Lea_Paredes/tree/master/hardware/kicad/LEA_PAREDES">Proyecto KiCad <span>KiCad</span></a>
+    <a href="https://github.com/srampello/RMP_Lea_Paredes/blob/master/hardware/kicad/LEA_PAREDES/MEDIDAS_MODULOS.md">Medidas de módulos <span>Markdown</span></a>
+    <a href="https://github.com/srampello/RMP_Lea_Paredes/tree/master/3d_stl">Piezas para imprimir <span>STL</span></a>
+    <a href="https://github.com/srampello/RMP_Lea_Paredes/tree/master/telemetry/LabyrinthControl">Labyrinth Control <span>Python</span></a>
+  </div>
+</section>
+
+      <footer class="doc-foot">
+        <a href="../unicum/">← UNICUM</a>
+        <a href="../../">Todos los robots</a>
+        <a href="../aus-kim/">AUS_KIM →</a>
+      </footer>
+    </article>
+  </div>
+
+  <script src="../../assets/js/robot.js" defer></script>
+  <script type="module" src="../../assets/js/stl-viewer.js"></script>
+</body>
+</html>

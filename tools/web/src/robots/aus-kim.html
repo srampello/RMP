@@ -1,0 +1,199 @@
+<!--
+{
+  "id": "aus-kim",
+  "name": "AUS_KIM",
+  "code": "RMP-004",
+  "title_suffix": "micromouse de RMP Robotics. Hardware, pinout, firmware y estado de la versión 2 con ESP32-C3.",
+  "kicker": "Micromouse de laberinto",
+  "version": "Versión 2 con ESP32-C3",
+  "lead": "Robot de laberinto prestado que usamos como plataforma de aprendizaje. Con él probamos sensores, PID de pared y navegación antes de llevarlos a nuestros propios micromouse.",
+  "repo": "https://github.com/srampello/AUS_KIM",
+  "art": {
+    "stl": [
+      [
+        "aus-kim/AUS_KIM_BASE.stl",
+        "#34313d"
+      ],
+      [
+        "aus-kim/AUS_KIM_top.stl",
+        "#6d4bd8"
+      ],
+      [
+        "aus-kim/AUS_KIM_soporteplaqueta.stl",
+        "#8a8597"
+      ]
+    ],
+    "label": "Modelo 3D de la base, la placa superior y el soporte de AUS_KIM"
+  },
+  "figures": [
+    [
+      "Sensores de pared",
+      "3",
+      "Sharp"
+    ],
+    [
+      "Motores N20 con encoder",
+      "1500",
+      "rpm"
+    ],
+    [
+      "PCB de dos capas",
+      "67 × 33",
+      "mm"
+    ],
+    [
+      "Batería LiPo",
+      "2S",
+      "7,4 V"
+    ]
+  ],
+  "side": {
+    "img": "aus-kim-foto.jpg",
+    "alt": "AUS_KIM armado, con la electrónica cableada sobre la base negra",
+    "caption": "AUS_KIM en el taller"
+  }
+}
+-->
+<section id="introduccion">
+  <h2>Introducción</h2>
+  <p>AUS_KIM es un micromouse que nos prestaron para aprender. No es un diseño propio de RMP: lo usamos como banco de pruebas para validar sensores, control y estrategias de laberinto que después llevamos a <a href="../lea-paredes/">LEA_PAREDES</a>.</p>
+  <p>La <strong>V1</strong> usó un ESP32-S3 con cuatro sensores Sharp y ya recorrió el laberinto siguiendo la pared derecha con giros temporizados. La <strong>V2</strong> es una placa nueva con ESP32-C3 Super Mini, tres Sharp, un sensor de piso para reconocer la llegada y motores con encoders completos. El esquemático de la V2 se cerró el 27 de octubre de 2026 y hoy está en calibración.</p>
+  <div class="note"><p>El firmware de carrera del repositorio sigue siendo de la V1. No se debe cargar en la placa V2 hasta portarlo.</p></div>
+</section>
+
+<section id="mecanica">
+  <h2>Mecánica</h2>
+  <h3 id="piezas">Piezas impresas</h3>
+  <p>El modelo de arriba combina tres piezas del repositorio, exportadas con el mismo origen, así que encajan sin moverlas.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Pieza</th><th>Archivo</th><th>Función</th></tr></thead>
+    <tbody>
+      <tr><td>Base</td><td><code>AUS_KIM_BASE.stl</code></td><td>Chasis de 92 × 96 mm, alojamiento de motores y batería</td></tr>
+      <tr><td>Placa superior</td><td><code>AUS_KIM_top.stl</code></td><td>Plano de 2 mm donde apoya la electrónica</td></tr>
+      <tr><td>Soporte de plaqueta</td><td><code>AUS_KIM_soporteplaqueta.stl</code></td><td>Eleva y fija la PCB principal</td></tr>
+      <tr><td>Base Sharp</td><td><code>base_sharp.stl</code></td><td>Montaje individual de cada sensor de distancia</td></tr>
+    </tbody>
+  </table></div>
+  <p>Para centrar el robot en la celda antes de largar hay una plantilla de corte en <code>cad/PLANTILLA_CELDA.dxf</code>, generada con <code>tools/generar_plantilla_celda.py</code>.</p>
+
+  <h3 id="traccion">Tracción</h3>
+  <p>La V2 reemplaza los motorreductores originales por dos <strong>N20 de 1500 rpm</strong> con encoder de cuadratura y lee los cuatro canales A/B. Los valores de la V1 (por ejemplo, <code>TICKS_PER_CM = 20.95</code>) no se trasladan: hay que medir pulsos por vuelta, diámetro de rueda y separación entre ruedas otra vez.</p>
+</section>
+
+<section id="hardware">
+  <h2>Hardware</h2>
+  <h3 id="v1-v2">De V1 a V2</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Elemento</th><th>V1</th><th>V2</th></tr></thead>
+    <tbody>
+      <tr><td>Microcontrolador</td><td>ESP32-S3 SuperMini</td><td>ESP32-C3 Super Mini</td></tr>
+      <tr><td>Sensores de pared</td><td>4 Sharp: dos frontales y dos laterales</td><td>3 Sharp: frontal, izquierdo y derecho</td></tr>
+      <tr><td>Llegada</td><td>Sin sensor de piso</td><td>QRE1113GR en plaqueta externa</td></tr>
+      <tr><td>Motores</td><td>Micromotores con encoder, solo diagnóstico</td><td>N20 1500 rpm con encoder A/B</td></tr>
+      <tr><td>Driver</td><td>DRV8833</td><td>DRV8833 con jumper JP1 de habilitación</td></tr>
+      <tr><td>Largada</td><td>Desde la página web</td><td>Pulsador START en GPIO9</td></tr>
+      <tr><td>Alimentación</td><td>LiPo 2S 250 mAh + BEC</td><td>LiPo 2S + BEC a 5 V</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="sharp">Sensores de pared</h3>
+  <p>Tres <strong>Sharp GP2Y0E03</strong> en modo analógico, sin I²C. Cada uno lleva VDD a 5 V del BEC, VIN(IO) y su pin GPIO1 de habilitación a 3,3 V, y la salida a un ADC del ESP32-C3. En la V1 se filtraba cada lectura con una mediana de 9 muestras y un suavizado exponencial de 75/25; los umbrales de esa versión no sirven para la nueva.</p>
+  <div class="note"><p>El pin «GPIO1» del Sharp no es el GPIO1 del ESP32-C3. El primero va a 3,3 V; el segundo recibe la salida del Sharp frontal.</p></div>
+
+  <h3 id="piso">Sensor de llegada</h3>
+  <p>Un <strong>QRE1113GR</strong> mirando al piso, en una plaqueta aparte con conector de tres contactos (GND, 3,3 V y señal a GPIO4). El LED usa 150 Ω y el fototransistor un pull-up de 10 kΩ ya incluido en la plaqueta. El umbral se calibra contra el piso real de la llegada.</p>
+
+  <h3 id="driver">Driver</h3>
+  <p>Un módulo <strong>DRV8833</strong> alimentado a 5 V regulados. El jumper JP1 conecta nSLEEP a 3,3 V: se enciende el robot con JP1 abierto, se espera a que el firmware deje los cuatro pines de motor en parada, y recién entonces se coloca JP1 y se pulsa START.</p>
+
+  <h3 id="alimentacion">Alimentación</h3>
+  <ul>
+    <li><strong>LiPo 2S</strong>: 7,4 V nominales, 8,4 V cargada, pasando por el interruptor general.</li>
+    <li><strong>5 V del BEC</strong>: ESP32-C3, los tres Sharp y el DRV8833.</li>
+    <li><strong>3,3 V de la placa</strong>: lógica de los Sharp, encoders, sensor de piso y JP1.</li>
+    <li><strong>GND común</strong> para batería, BEC, ESP32, driver y sensores.</li>
+  </ul>
+</section>
+
+<section id="pinout">
+  <h2>Pinout V2</h2>
+  <p>Transcripto del esquemático EasyEDA. Los nombres de red son los que usa el firmware.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th class="num">GPIO</th><th>Red</th><th>Uso</th></tr></thead>
+    <tbody>
+      <tr><td class="num">0</td><td><code>SH_I</code></td><td>Sharp lateral izquierdo (ADC)</td></tr>
+      <tr><td class="num">1</td><td><code>SH_F</code></td><td>Sharp frontal (ADC)</td></tr>
+      <tr><td class="num">2</td><td><code>AIN1</code></td><td>DRV8833 IN1, motor derecho</td></tr>
+      <tr><td class="num">3</td><td><code>SH_D</code></td><td>Sharp lateral derecho (ADC)</td></tr>
+      <tr><td class="num">4</td><td><code>SENSOR</code></td><td>QRE1113GR de piso (ADC)</td></tr>
+      <tr><td class="num">5</td><td><code>ENC_IB</code></td><td>Encoder izquierdo, canal B</td></tr>
+      <tr><td class="num">6</td><td><code>ENC_IA</code></td><td>Encoder izquierdo, canal A</td></tr>
+      <tr><td class="num">7</td><td><code>ENC_DB</code></td><td>Encoder derecho, canal B</td></tr>
+      <tr><td class="num">8</td><td><code>AIN2</code></td><td>DRV8833 IN2, motor derecho</td></tr>
+      <tr><td class="num">9</td><td><code>START</code></td><td>Pulsador de largada, activo en LOW</td></tr>
+      <tr><td class="num">10</td><td><code>ENC_DA</code></td><td>Encoder derecho, canal A</td></tr>
+      <tr><td class="num">20</td><td><code>BIN1</code></td><td>DRV8833 IN3, motor izquierdo</td></tr>
+      <tr><td class="num">21</td><td><code>BIN2</code></td><td>DRV8833 IN4, motor izquierdo</td></tr>
+    </tbody>
+  </table></div>
+  <p>GPIO2, 8 y 9 son pines de arranque del C3. Por eso los encoders se movieron a 5, 6, 7 y 10, y GPIO2 y GPIO8 llevan pull-ups de 10 kΩ. No hay que mantener START pulsado al encender.</p>
+</section>
+
+<section id="firmware">
+  <h2>Firmware</h2>
+  <h3 id="etapas">Etapas</h3>
+  <p>Cada etapa es un sketch independiente dentro de <code>firmware/</code>. Las seis primeras son de la V1.</p>
+  <ol class="steps">
+    <li class="done"><span><strong>Diagnóstico Wi-Fi.</strong> Prueba de motores, encoders y Sharp uno por uno desde el navegador.</span></li>
+    <li class="done"><span><strong>Seguimiento de pared.</strong> PID a 100 Hz con el Sharp derecho y ajuste de Kp, Ki y Kd en vivo.</span></li>
+    <li class="done"><span><strong>Distancia frontal.</strong> Detección de pared al frente.</span></li>
+    <li class="done"><span><strong>Maze Solver.</strong> Regla de la mano derecha con giros temporizados.</span></li>
+    <li class="done"><span><strong>Test Suite.</strong> Une diagnóstico, PID y laberinto en una sola interfaz web.</span></li>
+    <li class="done"><span><strong>Race Control.</strong> Pantalla de largada con el botón RMP y STOP.</span></li>
+    <li><span><strong>V2 ESP32-C3.</strong> Calibración de encoders, avance y giros por Wi-Fi, con valores guardados en memoria.</span></li>
+  </ol>
+
+  <h3 id="test-suite">Test Suite y carrera</h3>
+  <p>El Test Suite es la única fuente del programa. El firmware de carrera no se edita a mano: cada push que toca el Test Suite dispara un workflow de GitHub Actions que lo regenera con <code>tools/generar_aus_kim_race.py</code>.</p>
+  <pre>firmware/05_test_suite/AUS_KIM_TEST_SUITE/   ← se edita acá
+  │  GitHub Actions
+  ▼
+firmware/06_race/AUS_KIM_RACE/               ← generado</pre>
+  <p>Las interfaces web viven en headers separados (<code>web_test_suite.h</code>, <code>web_race.h</code>) y el logo RMP en <code>rmp_logo.h</code>, así el robot funciona sin internet. Los ajustes hechos desde la web quedan en RAM: para fijarlos hay que cambiar los valores iniciales del Test Suite.</p>
+
+  <h3 id="navegacion">Navegación por pared</h3>
+  <p>Al detectar una apertura del lado elegido, el robot frena 500 ms, avanza 3 cm compensando con encoders, espera 300 ms, gira 90° y espera otros 300 ms. Si encuentra pared al frente gira hacia el lado contrario o da media vuelta.</p>
+  <pre>Motor izquierdo = PWM base − corrección
+Motor derecho   = PWM base + corrección</pre>
+  <p>Un ADC alto significa pared cerca, así que una corrección positiva aleja al robot de la pared derecha. La pérdida de pared se confirma con 100 ms por debajo de ADC 1300 antes de buscarla.</p>
+
+  <h3 id="calibracion">Calibración V2</h3>
+  <p><code>AUS_KIM_V2_CALIB</code> mide cuántas cuentas de encoder equivalen a 1 mm de avance y cuántas hacen falta para girar un ángulo, y prueba avances y giros controlados. Los valores se guardan en la memoria del robot. Cada movimiento tiene límite de tiempo y se puede cortar con STOP en la web o pulsando START.</p>
+</section>
+
+<section id="estado">
+  <h2>Estado y próximos pasos</h2>
+  <p>Lo que falta antes de correr con la V2, en orden:</p>
+  <ol class="steps">
+    <li class="done"><span>Esquemático V2 y pinout documentados.</span></li>
+    <li class="done"><span>Firmware de calibración V2 compilando.</span></li>
+    <li><span>Verificar arranque con JP1 abierto y niveles de las entradas del driver.</span></li>
+    <li><span>Probar los dos encoders a 3,3 V y el signo de cada rueda.</span></li>
+    <li><span>Calibrar los tres Sharp y el sensor de piso.</span></li>
+    <li><span>Portar el Test Suite al ESP32-C3.</span></li>
+    <li><span>Exploración con mapa (BFS / Flood Fill) y segunda pasada con encoders.</span></li>
+  </ol>
+</section>
+
+<section id="archivos">
+  <h2>Archivos</h2>
+  <div class="files">
+    <a href="https://github.com/srampello/AUS_KIM/blob/master/docs/AUS_KIM_V2_ESP32-C3.md">Referencia de hardware V2 <span>Markdown</span></a>
+    <a href="https://github.com/srampello/AUS_KIM/blob/master/EasyEDA/KIM_Board.pdf">Esquemático de la placa <span>PDF</span></a>
+    <a href="https://github.com/srampello/AUS_KIM/blob/master/EasyEDA/PCB_KIM_TOP.pdf">PCB, capa superior <span>PDF</span></a>
+    <a href="https://github.com/srampello/AUS_KIM/blob/master/EasyEDA/PCB_KIM_BOTTOM.pdf">PCB, capa inferior <span>PDF</span></a>
+    <a href="https://github.com/srampello/AUS_KIM/blob/master/EasyEDA/QRE1113GR_floor.pdf">Plaqueta del sensor de piso <span>PDF</span></a>
+    <a href="https://github.com/srampello/AUS_KIM/tree/master/stl">Piezas para imprimir <span>STL</span></a>
+    <a href="https://github.com/srampello/AUS_KIM/blob/master/docs/conexiones.md">Conexiones de la V1 <span>Markdown</span></a>
+  </div>
+</section>
