@@ -150,7 +150,7 @@ code, .mono { font-family: var(--mono); font-size: .9em; }
 }
 .hero-copy { position: relative; z-index: 2; }
 .hero-kicker { color: var(--muted); font-size: 15px; margin: 0 0 18px; }
-.hero h1 { --chars: 7; font-size: clamp(40px, min(8.4vw, 58vw / var(--chars)), 132px); line-height: .88; font-weight: 700; letter-spacing: -.02em; overflow-wrap: anywhere; }
+.hero h1 { --chars: 7; font-size: clamp(40px, min(8.4vw, 50vw / var(--chars)), 132px); line-height: .88; font-weight: 700; letter-spacing: -.02em; overflow-wrap: anywhere; }
 @media (max-width: 900px) { .hero h1 { font-size: clamp(36px, 128vw / var(--chars), 110px); } }
 .hero h1 .ver { display: block; margin-top: 14px; font-size: 18px; letter-spacing: 0; font-weight: 500; color: var(--violet); }
 .hero-lead { margin: 26px 0 0; max-width: 44ch; color: #c9c6d2; font-size: 18px; line-height: 1.55; }
