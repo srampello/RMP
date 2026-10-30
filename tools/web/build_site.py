@@ -12,6 +12,7 @@ hero y de las cifras; el resto del archivo son las secciones del informe. El
 Solo usa la biblioteca estándar de Python.
 """
 
+import hashlib
 import html
 import json
 import re
@@ -30,8 +31,22 @@ FONTS = ('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700
 THREE = 'https://cdn.jsdelivr.net/npm/three@0.160.0/'
 
 
+def asset_version(path):
+    """Hash corto del contenido: cambia la URL cuando cambia el archivo y evita la caché vieja."""
+    return hashlib.sha1((ROOT / path).read_bytes()).hexdigest()[:8]
+
+
+def versioned(text):
+    """Agrega ?v=<hash> a las hojas de estilo y scripts propios."""
+    def add(match):
+        url = match.group(2)
+        local = re.sub(r'^(\.\./)+', '', url)
+        return f'{match.group(1)}{url}?v={asset_version(local)}"'
+    return re.sub(r'((?:href|src)=")((?:\.\./)*assets/(?:css|js)/[\w.-]+)"', add, text)
+
+
 def with_drawings(text):
-    return re.sub(r'\{\{svg:([\w-]+)\}\}', lambda m: DRAWINGS[m.group(1)], text)
+    return versioned(re.sub(r'\{\{svg:([\w-]+)\}\}', lambda m: DRAWINGS[m.group(1)], text))
 
 
 def read_robot(robot_id):
@@ -173,7 +188,7 @@ def main():
         next_meta = robots[(i + 1) % len(robots)][0]
         out = ROOT / 'robots' / meta['id'] / 'index.html'
         out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(robot_page(meta, with_drawings(body), prev_meta, next_meta), encoding='utf-8')
+        out.write_text(versioned(robot_page(meta, with_drawings(body), prev_meta, next_meta)), encoding='utf-8')
         print(out.relative_to(ROOT).as_posix())
 
 
