@@ -19,26 +19,28 @@ Seguidor de línea de competición con sistema de succión y telemetría.
 | Software | Firmware Wi-Fi, aplicación Python, WebSocket y registro CSV |
 | Estado | Hardware, firmware y telemetría en desarrollo |
 
+- **Ficha técnica:** [srampello.github.io/RMP/robots/deimonyag](https://srampello.github.io/RMP/robots/deimonyag/)
 - **Repositorio:** [srampello/RMP_Deimonyag](https://github.com/srampello/RMP_Deimonyag)
 - **Visor de hardware:** [srampello.github.io/RMP_Deimonyag](https://srampello.github.io/RMP_Deimonyag/)
 
 ### UNICUM
 
-Seguidor de línea con doce sensores analógicos conectados directamente, sin multiplexor.
+Seguidor de línea compacto con barra recta de doce sensores, multiplexor, selector de perfiles por DIP switch y largada con MicroStart.
 
 | Área | Configuración actual |
 |---|---|
-| Controlador | ESP32-WROOM / ESP32S con Wi-Fi y Bluetooth 4.2 |
-| Sensores | 12 × QRE1113GR, arquitectura inspirada en QTR-8A |
+| Controlador | ESP32-C3 Super Mini |
+| Sensores | 12 × QRE1113GR con 74HC4067, lectura por ADC1 |
 | Driver | TB6612FNG |
-| Tracción | 2 × motores Pololu de 6 V |
-| Energía | LiPo 2S |
-| Interfaz | Tres botones para estrategias, calibración y configuración |
-| Control | Calibración, estrategias y PD |
-| Estado | Base eléctrica, firmware y documentación v0.1 |
+| Tracción | 2 × N20 6 V 2000 RPM |
+| Energía | LiPo 2S con reguladores propuestos de 6 V (motores) y 5 V (placa) |
+| Interfaz | DIP switch de 3 vías para perfiles y MicroStart JSumo |
+| Control | PD con período de 5 ms, calibración guardada y telemetría web |
+| Estado | Firmware v0.2; PCB todavía sin rutear |
 
-La lectura utiliza ADC1 y ADC2. Como ADC2 no está disponible con Wi-Fi activo en este ESP32, el Wi-Fi se utiliza solamente durante la configuración con el robot detenido y se apaga antes de leer los doce sensores o iniciar la marcha.
+La v0.2 reemplaza a la versión ESP32-WROOM con sensores directos; su cableado no es compatible.
 
+- **Ficha técnica:** [srampello.github.io/RMP/robots/unicum](https://srampello.github.io/RMP/robots/unicum/)
 - **Repositorio:** [srampello/RMP_unicum](https://github.com/srampello/RMP_unicum)
 
 ## Micromouse y laberinto
@@ -61,25 +63,24 @@ Micromouse propio de competición desarrollado por RMP Robotics.
 La estrategia inicial sigue la pared derecha con detección frontal y giros temporizados, dejando preparada una evolución posterior hacia navegación con mapa y encoders.
 
 - **Repositorio:** [srampello/RMP_Lea_Paredes](https://github.com/srampello/RMP_Lea_Paredes)
-- **Página del robot:** [RMP Robotics — LEA_PAREDES](https://rmp-robotics.santii-rampe.chatgpt.site/robots/lea-paredes)
+- **Ficha técnica:** [srampello.github.io/RMP/robots/lea-paredes](https://srampello.github.io/RMP/robots/lea-paredes/)
 
 ### AUS_KIM
 
 Robot de laberinto prestado y utilizado como plataforma de aprendizaje, diagnóstico y desarrollo de navegación.
 
-| Área | Configuración actual |
-|---|---|
-| Controlador | ESP32-S3 SuperMini |
-| Sensores | 4 × Sharp GP2Y0E03 |
-| Driver | DRV8833 |
-| Tracción | 2 × micromotores con encoders de cuadratura |
-| Energía | LiPo CNHL Pizza V2 2S 250 mAh |
-| Software | Test Suite web, PID lateral, pruebas de sensores/motores/encoders y Race Control |
-| Navegación | Seguimiento de pared derecha y maniobras temporizadas |
-| Estado | Calibración y pruebas activas en laberinto |
+| Área | V1 (probada) | V2 (en calibración) |
+|---|---|---|
+| Controlador | ESP32-S3 SuperMini | ESP32-C3 Super Mini |
+| Sensores | 4 × Sharp GP2Y0E03 | 3 × Sharp GP2Y0E03 + QRE1113GR de piso |
+| Driver | DRV8833 | DRV8833 con jumper JP1 de habilitación |
+| Tracción | Micromotores con encoder (solo diagnóstico) | 2 × N20 1500 RPM con encoder A/B |
+| Energía | LiPo 2S 250 mAh + BEC | LiPo 2S + BEC 5 V |
+| Navegación | Pared derecha con PID y giros temporizados | Prevista: mapeo con BFS / Flood Fill y encoders |
 
-El Test Suite es la fuente de verdad del firmware. La versión Race se genera automáticamente y comparte la misma lógica de sensores, motores y navegación.
+El Test Suite es la fuente de verdad del firmware V1. La versión Race se genera automáticamente y comparte la misma lógica de sensores, motores y navegación. La V2 tiene su propio sketch de calibración.
 
+- **Ficha técnica:** [srampello.github.io/RMP/robots/aus-kim](https://srampello.github.io/RMP/robots/aus-kim/)
 - **Repositorio:** [srampello/AUS_KIM](https://github.com/srampello/AUS_KIM)
 
 ## Comparación general
@@ -87,9 +88,9 @@ El Test Suite es la fuente de verdad del firmware. La versión Race se genera au
 | Proyecto | Categoría | MCU | Sensores principales | Driver |
 |---|---|---|---|---|
 | Deimonyag | Seguidor con succión | ESP32-C3 | 12 QRE1113GR + MUX | IFX9201SG |
-| UNICUM | Seguidor sin MUX | ESP32-WROOM | 12 QRE1113GR directos | TB6612FNG |
+| UNICUM | Seguidor con MUX | ESP32-C3 | 12 QRE1113GR + MUX | TB6612FNG |
 | LEA_PAREDES | Micromouse propio | ESP32-C3 | 4 pares IR | TB6612FNG |
-| AUS_KIM | Micromouse de pruebas | ESP32-S3 | 4 Sharp GP2Y0E03 | DRV8833 |
+| AUS_KIM | Micromouse de pruebas | ESP32-C3 (V2) | 3 Sharp GP2Y0E03 + piso | DRV8833 |
 
 ## Alta de un nuevo proyecto
 

@@ -2,32 +2,34 @@
 
 Repositorio central de **RMP Robotics**. Funciona como índice de todos los robots, punto de acceso a sus repositorios y biblioteca de firmware, documentación y herramientas reutilizables.
 
+**Sitio web:** [srampello.github.io/RMP](https://srampello.github.io/RMP/)
+
 ## Mapa de proyectos
 
 ### Seguidores de línea
 
 | Robot | Enfoque | Controlador | Sensores | Estado | Repositorio |
 |---|---|---|---|---|---|
-| **Deimonyag** | Competición con sistema de succión | ESP32-C3 Super Mini | 12 × QRE1113GR con CD74HC4067 | Hardware, firmware Wi-Fi y telemetría en desarrollo | [RMP_Deimonyag](https://github.com/srampello/RMP_Deimonyag) |
-| **UNICUM** | Seguidor compacto sin MUX | ESP32-WROOM / ESP32S | 12 × QRE1113GR analógicos directos | Base de diseño y firmware v0.1 | [RMP_unicum](https://github.com/srampello/RMP_unicum) |
+| [**Deimonyag**](https://srampello.github.io/RMP/robots/deimonyag/) | Competición con sistema de succión | ESP32-C3 Super Mini | 12 × QRE1113GR con CD74HC4067 | Hardware, firmware Wi-Fi y telemetría en desarrollo | [RMP_Deimonyag](https://github.com/srampello/RMP_Deimonyag) |
+| [**UNICUM**](https://srampello.github.io/RMP/robots/unicum/) | Seguidor compacto con selector DIP y MicroStart | ESP32-C3 Super Mini | 12 × QRE1113GR con 74HC4067 | Firmware v0.2, PCB sin rutear | [RMP_unicum](https://github.com/srampello/RMP_unicum) |
 
 ### Micromouse y laberinto
 
 | Robot | Enfoque | Controlador | Sensores | Estado | Repositorio |
 |---|---|---|---|---|---|
-| **LEA_PAREDES** | Micromouse propio de competición | ESP32-C3 Super Mini | 4 pares IR | Diseño mecánico, electrónico y firmware | [RMP_Lea_Paredes](https://github.com/srampello/RMP_Lea_Paredes) |
-| **AUS_KIM** | Plataforma prestada de aprendizaje y navegación | ESP32-S3 SuperMini | 4 × Sharp GP2Y0E03 | Pruebas, PID y navegación de laberinto | [AUS_KIM](https://github.com/srampello/AUS_KIM) |
+| [**LEA_PAREDES**](https://srampello.github.io/RMP/robots/lea-paredes/) | Micromouse propio de competición | ESP32-C3 Super Mini | 4 pares IR | Diseño mecánico, electrónico y firmware | [RMP_Lea_Paredes](https://github.com/srampello/RMP_Lea_Paredes) |
+| [**AUS_KIM**](https://srampello.github.io/RMP/robots/aus-kim/) | Plataforma prestada de aprendizaje y navegación | ESP32-C3 Super Mini (V2) | 3 × Sharp GP2Y0E03 + QRE1113GR de piso | V1 probada en laberinto, V2 en calibración | [AUS_KIM](https://github.com/srampello/AUS_KIM) |
 
-La información ampliada de cada proyecto está en [PROJECTS.md](PROJECTS.md). El firmware final, los esquemáticos, el CAD y las calibraciones permanecen en el repositorio de cada robot.
+La información ampliada de cada proyecto está en su ficha técnica del [sitio web](https://srampello.github.io/RMP/) y en [PROJECTS.md](PROJECTS.md). El firmware final, los esquemáticos, el CAD y las calibraciones permanecen en el repositorio de cada robot.
 
 ## Accesos destacados
 
-- [Deimonyag — repositorio](https://github.com/srampello/RMP_Deimonyag)
-- [Deimonyag — visor de hardware](https://srampello.github.io/RMP_Deimonyag/)
-- [UNICUM — repositorio](https://github.com/srampello/RMP_unicum)
-- [LEA_PAREDES — repositorio](https://github.com/srampello/RMP_Lea_Paredes)
-- [LEA_PAREDES — página del robot](https://rmp-robotics.santii-rampe.chatgpt.site/robots/lea-paredes)
-- [AUS_KIM — repositorio](https://github.com/srampello/AUS_KIM)
+| Robot | Ficha técnica | Repositorio | Otros |
+|---|---|---|---|
+| Deimonyag | [Ficha](https://srampello.github.io/RMP/robots/deimonyag/) | [RMP_Deimonyag](https://github.com/srampello/RMP_Deimonyag) | [Visor de hardware](https://srampello.github.io/RMP_Deimonyag/) |
+| UNICUM | [Ficha](https://srampello.github.io/RMP/robots/unicum/) | [RMP_unicum](https://github.com/srampello/RMP_unicum) | |
+| LEA_PAREDES | [Ficha](https://srampello.github.io/RMP/robots/lea-paredes/) | [RMP_Lea_Paredes](https://github.com/srampello/RMP_Lea_Paredes) | |
+| AUS_KIM | [Ficha](https://srampello.github.io/RMP/robots/aus-kim/) | [AUS_KIM](https://github.com/srampello/AUS_KIM) | |
 
 ## Sitio web
 
