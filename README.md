@@ -29,6 +29,23 @@ La información ampliada de cada proyecto está en [PROJECTS.md](PROJECTS.md). E
 - [LEA_PAREDES — página del robot](https://rmp-robotics.santii-rampe.chatgpt.site/robots/lea-paredes)
 - [AUS_KIM — repositorio](https://github.com/srampello/AUS_KIM)
 
+## Sitio web
+
+El sitio de GitHub Pages (`index.html` y `robots/<robot>/index.html`) se genera desde `tools/web/`:
+
+```bash
+python tools/web/build_site.py
+```
+
+| Archivo | Contenido |
+|---|---|
+| `tools/web/src/index.html` | Portada con las tarjetas de cada robot |
+| `tools/web/src/robots/<robot>.html` | Ficha de cada robot: datos del hero en el comentario inicial y secciones del informe |
+| `tools/web/drawings.py` | Dibujos técnicos en SVG de la vista superior de cada robot |
+| `assets/models/` | Modelos STL que muestra el visor 3D |
+
+Para agregar un robot: crear su archivo en `src/robots/`, sumarlo a `ORDER` en `build_site.py`, agregar su tarjeta en `src/index.html` y volver a generar. No editar a mano los HTML generados.
+
 ## Recursos compartidos
 
 | Sección | Contenido |
