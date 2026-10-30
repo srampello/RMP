@@ -1,0 +1,51 @@
+<!--
+{
+  "repo_dir": "RMP_Lea_Paredes",
+  "url": "/RMP_Lea_Paredes/",
+  "tagline": "El micromouse de diseño propio de RMP Robotics: base impresa en 3D, cuatro pares infrarrojos y una turbina de 30 mm.",
+  "statement": {
+    "title": "Diseñado por RMP, celda por celda.",
+    "text": "LEA_PAREDES está pensado para laberintos de celdas de 18 × 18 cm. Arranca siguiendo la pared derecha y está preparado para crecer hacia navegación con mapa."
+  }
+}
+-->
+<section class="feat" id="turbina">
+  <div class="feat-art"><img src="/RMP/assets/images/lea-paredes.webp" alt="Render de la turbina de LEA_PAREDES: seis aspas curvas sobre un disco" loading="lazy"></div>
+  <div class="feat-copy">
+    <p class="kicker">Succión</p>
+    <h2>Una turbina diseñada para este robot.</h2>
+    <p>Un impulsor centrífugo con disco cerrado y seis aspas curvadas hacia atrás. Aspira por el centro y expulsa por los costados, movido por un motor coreless 8520. Hay versiones para giro horario y antihorario.</p>
+    <dl class="stats">
+      <div><dt>Diámetro</dt><dd>30<small>mm</small></dd></div>
+      <div><dt>Altura total</dt><dd>6,3<small>mm</small></dd></div>
+      <div><dt>Aspas</dt><dd>6</dd></div>
+      <div><dt>Motor coreless</dt><dd>8520</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="feat flip" id="sensores">
+  <div class="feat-art">{{svg:lea-paredes}}</div>
+  <div class="feat-copy">
+    <p class="kicker">Sensado</p>
+    <h2>Cuatro pares mirando las paredes.</h2>
+    <p>Dos frontales y dos laterales, cada uno con un emisor TSAL6100 y un receptor PT334-6B. Los cuatro emisores se encienden juntos desde un solo pin del ESP32-C3.</p>
+    <dl class="stats">
+      <div><dt>Pares infrarrojos</dt><dd>4</dd></div>
+      <div><dt>Celda del laberinto</dt><dd>18<small>cm</small></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="feat" id="mecanica">
+  <div class="feat-art">{{stl:lea-paredes/Rueda_Micromouse.stl#8a8597|Modelo 3D de la rueda de LEA_PAREDES}}</div>
+  <div class="feat-copy">
+    <p class="kicker">Mecánica</p>
+    <h2>Impreso y armado en el taller.</h2>
+    <p>La base impresa en 3D integra los motores, la batería y la turbina; la electrónica va en una PCB superior. Las piezas se diseñan en Fusion 360 y las ruedas también son propias.</p>
+    <dl class="stats">
+      <div><dt>Ruedas</dt><dd>26<small>mm</small></dd></div>
+      <div><dt>Motores Pololu</dt><dd>1000<small>rpm</small></dd></div>
+    </dl>
+  </div>
+</section>

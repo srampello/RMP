@@ -1,0 +1,56 @@
+<!--
+{
+  "repo_dir": "AUS_KIM",
+  "url": "/AUS_KIM/",
+  "tagline": "El micromouse con el que RMP Robotics aprende a resolver laberintos: sensores, PID de pared y navegación, probados en pista.",
+  "statement": {
+    "title": "El banco de pruebas que recorre el laberinto.",
+    "text": "AUS_KIM es un robot prestado. Con él validamos sensores, control y estrategias antes de llevarlos a nuestros propios micromouse. La V1 ya corre siguiendo la pared derecha; la V2 suma encoders y un sensor de llegada."
+  }
+}
+-->
+<section class="feat" id="sensores">
+  <div class="feat-art">{{svg:aus-kim}}</div>
+  <div class="feat-copy">
+    <p class="kicker">Sensado</p>
+    <h2>Tres Sharp y un ojo en el piso.</h2>
+    <p>La V2 usa un Sharp GP2Y0E03 al frente y uno a cada lado para medir las paredes, y un QRE1113GR mirando al piso para reconocer la celda de llegada.</p>
+    <dl class="stats">
+      <div><dt>Sensores de pared</dt><dd>3<small>Sharp</small></dd></div>
+      <div><dt>Sensor de llegada</dt><dd>1<small>QRE1113GR</small></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="feat flip" id="traccion">
+  <div class="feat-art"><img src="/RMP/assets/images/aus-kim-foto.jpg" alt="AUS_KIM armado, con la electrónica cableada sobre la base negra" loading="lazy"></div>
+  <div class="feat-copy">
+    <p class="kicker">Tracción</p>
+    <h2>Encoders para saber dónde está.</h2>
+    <p>Dos motores N20 con encoder de cuadratura completo, leídos en los cuatro canales. Con ellos la V2 va a medir avances y giros en lugar de calcularlos por tiempo, el paso previo a mapear el laberinto.</p>
+    <dl class="stats">
+      <div><dt>Motores N20</dt><dd>1500<small>rpm</small></dd></div>
+      <div><dt>Canales de encoder</dt><dd>4</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="feat" id="firmware">
+  <div class="feat-art"><pre>05_test_suite/   ← se edita acá
+      │
+      │  GitHub Actions
+      ▼
+06_race/         ← generado
+
+192.168.4.1/       pruebas y calibración
+192.168.4.1/race   largada</pre></div>
+  <div class="feat-copy">
+    <p class="kicker">Firmware</p>
+    <h2>Un solo programa, dos pantallas.</h2>
+    <p>El Test Suite reúne diagnóstico, PID de pared y laberinto en una página web servida por el propio robot. El firmware de carrera se genera automáticamente desde ese código, así lo que se prueba es exactamente lo que corre.</p>
+    <dl class="stats">
+      <div><dt>Etapas de firmware</dt><dd>7</dd></div>
+      <div><dt>Límite de carrera autónoma (V1)</dt><dd>120<small>s</small></dd></div>
+    </dl>
+  </div>
+</section>

@@ -1,0 +1,54 @@
+<!--
+{
+  "repo_dir": "RMP_unicum",
+  "url": "/RMP_unicum/",
+  "tagline": "Seguidor de línea compacto de RMP Robotics: doce sensores, tres perfiles de carrera y largada con MicroStart.",
+  "statement": {
+    "title": "Doce sensores, una sola entrada.",
+    "text": "La versión 0.2 pasó a un ESP32-C3 con multiplexor. Todos los sensores se leen por ADC1, así el Wi-Fi puede quedar encendido mientras el robot corre."
+  }
+}
+-->
+<section class="feat" id="sensores">
+  <div class="feat-art"><img class="framed" src="hardware/sensor_analogico.svg" alt="Circuito de una celda QRE1113GR: LED con 180 Ω a 5 V y fototransistor con pull-up de 47 kΩ a 3,3 V" loading="lazy"></div>
+  <div class="feat-copy">
+    <p class="kicker">Sensado</p>
+    <h2>Una celda, repetida doce veces.</h2>
+    <p>Cada QRE1113GR tiene su propia resistencia de LED y su pull-up a 3,3 V. Es el principio de la QTR-8A de Pololu adaptado a la lógica del ESP32, con los sensores separados 8 mm en una barra recta.</p>
+    <dl class="stats">
+      <div><dt>Sensores QRE1113GR</dt><dd>12</dd></div>
+      <div><dt>Paso entre sensores</dt><dd>8<small>mm</small></dd></div>
+      <div><dt>Corriente por LED</dt><dd>21<small>mA</small></dd></div>
+      <div><dt>De S01 a S12</dt><dd>88<small>mm</small></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="feat flip" id="arquitectura">
+  <div class="feat-art"><img class="framed" src="hardware/conexiones.svg" alt="Diagrama de conexiones de UNICUM: barra, 74HC4067, ESP32-C3, TB6612FNG, DIP switch y MicroStart" loading="lazy"></div>
+  <div class="feat-copy">
+    <p class="kicker">Arquitectura</p>
+    <h2>Un multiplexor para todo.</h2>
+    <p>El 74HC4067 recibe los doce sensores y también las tres posiciones del selector. El ESP32-C3 elige cada canal con cuatro pines y lee la señal por una sola entrada analógica. Una única tarea de control hace la lectura y mueve los motores.</p>
+    <dl class="stats">
+      <div><dt>Ciclo de control</dt><dd>5<small>ms</small></dd></div>
+      <div><dt>Canales del multiplexor en uso</dt><dd>15<small>de 16</small></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="feat" id="largada">
+  <div class="feat-art"><pre>MicroStart   LOW ≥ 50 ms  →  HIGH ≥ 20 ms  →  START
+             LOW               →  STOP (driver en STBY)
+
+Selector DIP  SW1 · SW2 · SW3   exactamente uno en ON</pre></div>
+  <div class="feat-copy">
+    <p class="kicker">Largada</p>
+    <h2>Arranca cuando la señal es clara.</h2>
+    <p>El MicroStart tiene que pasar de STOP a START con tiempos mínimos; encender el robot con la señal en alto no lo hace arrancar. En STOP la misma señal deshabilita el driver por hardware, aunque el firmware tarde en reaccionar.</p>
+    <dl class="stats">
+      <div><dt>Perfiles de carrera</dt><dd>3</dd></div>
+      <div><dt>Motores N20</dt><dd>2000<small>rpm</small></dd></div>
+    </dl>
+  </div>
+</section>

@@ -33,7 +33,15 @@ La información ampliada de cada proyecto está en su ficha técnica del [sitio 
 
 ## Sitio web
 
-El sitio de GitHub Pages (`index.html` y `robots/<robot>/index.html`) se genera desde `tools/web/`:
+Hay dos niveles de páginas, todas generadas desde `tools/web/` con la misma estética (negro, blanco y violeta RMP):
+
+| Página | Dirección | Contenido |
+|---|---|---|
+| Portada | [srampello.github.io/RMP](https://srampello.github.io/RMP/) | Tarjetas de todos los robots |
+| Ficha de cada robot | `srampello.github.io/RMP/robots/<robot>/` | Resumen e informe técnico |
+| Sitio de cada robot | `srampello.github.io/<repo del robot>/` | Vitrina por sistemas e informe técnico |
+
+Para regenerar todo, con los repositorios de los robots clonados al lado de este (`../RMP_Deimonyag`, `../AUS_KIM`, etc.):
 
 ```bash
 python tools/web/build_site.py
@@ -41,12 +49,16 @@ python tools/web/build_site.py
 
 | Archivo | Contenido |
 |---|---|
-| `tools/web/src/index.html` | Portada con las tarjetas de cada robot |
-| `tools/web/src/robots/<robot>.html` | Ficha de cada robot: datos del hero en el comentario inicial y secciones del informe |
+| `tools/web/src/index.html` | Portada |
+| `tools/web/src/robots/<robot>.html` | Informe técnico: datos del hero en el comentario inicial y secciones |
+| `tools/web/src/sites/<robot>.html` | Vitrina del sitio propio: logo, frase y secciones con cifras |
 | `tools/web/drawings.py` | Dibujos técnicos en SVG de la vista superior de cada robot |
-| `assets/models/` | Modelos STL que muestra el visor 3D |
+| `tools/web/robot_site.py` | Plantilla del sitio propio de cada robot |
+| `assets/css`, `assets/js`, `assets/models` | Estilos, scripts y modelos 3D que usan todas las páginas |
 
-Para agregar un robot: crear su archivo en `src/robots/`, sumarlo a `ORDER` en `build_site.py`, agregar su tarjeta en `src/index.html` y volver a generar. No editar a mano los HTML generados.
+El informe técnico se escribe una sola vez y aparece en la ficha y en el sitio del robot. Los sitios de los robots toman estilos y modelos de este repositorio, así que un cambio de diseño acá se ve en todos. No editar a mano los HTML generados: después de regenerar, hacer commit en cada repositorio que haya cambiado.
+
+Para agregar un robot: crear sus archivos en `src/robots/` y `src/sites/`, sumarlo a `ORDER` en `build_site.py` y agregar su tarjeta en `src/index.html`.
 
 ## Recursos compartidos
 

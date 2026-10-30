@@ -1,0 +1,86 @@
+<!--
+{
+  "repo_dir": "RMP_Deimonyag",
+  "url": "/RMP_Deimonyag/",
+  "logo": "/RMP/assets/images/deimonyag.webp",
+  "logo_alt": "Deimonyag: un demonio con casco y turbina sobre el nombre en dorado",
+  "tagline": "Seguidor de línea de competición de RMP Robotics, con succión y telemetría por Wi-Fi.",
+  "nav": [["Esquemáticos", "schematics.html"]],
+  "statement": {
+    "title": "Rápido. Preciso. Pegado a la pista.",
+    "text": "Una ESP32-C3, una barra curva de 12 sensores, dos motores ProFast con control independiente y una turbina EDF27 que aumenta la carga sobre la pista sin sumar masa."
+  }
+}
+-->
+<section class="feat" id="sensado">
+  <div class="feat-art">{{svg:deimonyag}}</div>
+  <div class="feat-copy">
+    <p class="kicker">Sensado</p>
+    <h2>Doce sensores sobre un arco.</h2>
+    <p>Los QRE1113GR siguen una curva de 95 mm de radio, orientados en forma radial. Un multiplexor CD74HC4067 junta las doce lecturas en una sola entrada analógica del ESP32-C3.</p>
+    <dl class="stats">
+      <div><dt>Sensores QRE1113GR</dt><dd>12</dd></div>
+      <div><dt>Radio de la barra</dt><dd>95<small>mm</small></dd></div>
+      <div><dt>Separación entre sensores</dt><dd>4,8<small>°</small></dd></div>
+      <div><dt>Entradas analógicas usadas</dt><dd>1</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="feat flip" id="traccion">
+  <div class="feat-art"><img src="images/web/motor-profast.webp" alt="Motor JSumo ProFast de 12 V y 3600 rpm" loading="lazy"></div>
+  <div class="feat-copy">
+    <p class="kicker">Tracción</p>
+    <h2>Dos motores, control independiente.</h2>
+    <p>Dos JSumo ProFast de 12 V comandados por drivers Infineon IFX9201SG. Cada lado tiene su propio PWM y dirección para el control diferencial.</p>
+    <dl class="stats">
+      <div><dt>Velocidad nominal</dt><dd>3600<small>rpm</small></dd></div>
+      <div><dt>Tensión de los motores</dt><dd>12<small>V</small></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="feat" id="succion">
+  <div class="feat-art"><img src="images/web/edf27.webp" alt="Turbina EDF27 brushless" loading="lazy"></div>
+  <div class="feat-copy">
+    <p class="kicker">Succión</p>
+    <h2>Más agarre sin sumar peso.</h2>
+    <p>La EDF27 genera una depresión bajo el chasis. Eso aumenta la fuerza normal contra la pista y, con ella, la adherencia disponible para acelerar y doblar. Se alimenta directo de la LiPo 3S a través de su ESC.</p>
+    <dl class="stats">
+      <div><dt>Turbina brushless</dt><dd>EDF27</dd></div>
+      <div><dt>Batería LiPo</dt><dd>3S<small>450 mAh</small></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="feat flip" id="electronica">
+  <div class="feat-art"><img src="images/web/esp32-c3-super-mini.webp" alt="Placa ESP32-C3 Super Mini" loading="lazy"></div>
+  <div class="feat-copy">
+    <p class="kicker">Electrónica</p>
+    <h2>Todo en una ESP32-C3 Super Mini.</h2>
+    <p>Lee los sensores, calcula el control, genera el PWM de ambos motores y la señal del ESC, y atiende el MicroStart, el botón de estrategia y el Wi-Fi. Un Matek MICRO BEC le entrega 5 V estables desde la batería.</p>
+    <dl class="stats">
+      <div><dt>Pines en uso</dt><dd>13<small>GPIO</small></dd></div>
+      <div><dt>Regulador</dt><dd>5<small>V</small></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="feat" id="telemetria">
+  <div class="feat-art"><pre>{"type":"mode","mode":"TELEMETRY"}
+
+← sensores, posición, error
+← P, D, salida PID
+← PWM, EDF, tiempo de loop
+
+→ guardado en CSV</pre></div>
+  <div class="feat-copy">
+    <p class="kicker">Telemetría</p>
+    <h2>Ver la carrera desde la PC.</h2>
+    <p>El robot crea su propia red Wi-Fi y habla con una aplicación de Python por WebSocket. En banco se prueban motores, turbina y sensores; en carrera la PC solo escucha, así que perder la conexión no cambia lo que hace el robot.</p>
+    <dl class="stats">
+      <div><dt>Modos</dt><dd>2<small>banco y carrera</small></dd></div>
+      <div><dt>Corte de seguridad en banco</dt><dd>500<small>ms</small></dd></div>
+    </dl>
+  </div>
+</section>

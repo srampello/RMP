@@ -4,6 +4,13 @@
 
 - src/index.html          -> index.html (portada)
 - src/robots/<id>.html    -> robots/<id>/index.html (ficha de cada robot)
+- src/sites/<id>.html     -> ../<repo del robot>/index.html (sitio propio del robot:
+                             vitrina + el mismo informe de la ficha)
+
+Los sitios de cada robot usan la hoja de estilos, los scripts y los modelos 3D
+publicados en srampello.github.io/RMP/, así la estética queda en un solo lugar.
+Se escriben en las carpetas hermanas de este repo (../RMP_Deimonyag, ../AUS_KIM,
+etc.) cuando existen; si no, se omiten.
 
 Cada ficha empieza con un comentario HTML que contiene un JSON con los datos del
 hero y de las cifras; el resto del archivo son las secciones del informe. El
@@ -19,6 +26,7 @@ import re
 from pathlib import Path
 
 from drawings import DRAWINGS
+import robot_site
 
 ROOT = Path(__file__).resolve().parents[2]
 SRC = Path(__file__).resolve().parent / 'src'
@@ -39,10 +47,8 @@ def asset_version(path):
 def versioned(text):
     """Agrega ?v=<hash> a las hojas de estilo y scripts propios."""
     def add(match):
-        url = match.group(2)
-        local = re.sub(r'^(\.\./)+', '', url)
-        return f'{match.group(1)}{url}?v={asset_version(local)}"'
-    return re.sub(r'((?:href|src)=")((?:\.\./)*assets/(?:css|js)/[\w.-]+)"', add, text)
+        return f'{match.group(1)}{match.group(2)}{match.group(3)}?v={asset_version(match.group(3))}"'
+    return re.sub(r'((?:href|src)=")((?:\.\./)*|/RMP/)(assets/(?:css|js)/[\w.-]+)"', add, text)
 
 
 def with_drawings(text):
@@ -76,14 +82,16 @@ def outline(body):
     return '<ol>' + ''.join(out) + '</ol>'
 
 
-def hero_art(meta):
+def viewer(parts, label, base):
+    data = html.escape(json.dumps([{'src': f'{base}assets/models/{src}', 'color': color} for src, color in parts]), quote=True)
+    return (f'<div class="viewer" data-stl="{data}" aria-label="{label}">'
+            '<span class="viewer-msg">Cargando modelo 3D…</span></div>')
+
+
+def hero_art(meta, base='../../'):
     art = meta['art']
     if 'stl' in art:
-        parts = [{'src': f'../../assets/models/{src}', 'color': color} for src, color in art['stl']]
-        data = html.escape(json.dumps(parts), quote=True)
-        return (f'<div class="viewer" data-stl="{data}" aria-label="{art["label"]}">'
-                '<span class="viewer-msg">Cargando modelo 3D…</span></div>'
-                '<span class="hint">Arrastrá para girar el modelo</span>')
+        return viewer(art['stl'], art['label'], base) + '<span class="hint">Arrastrá para girar el modelo</span>'
     if 'svg' in art:
         return DRAWINGS[art['svg']].replace('class="draw"', 'class="draw draw-hero"', 1)
     return ''
@@ -95,16 +103,16 @@ def figures(meta):
     return f'<dl class="figures">{cells}</dl>'
 
 
-def side_media(meta):
+def side_media(meta, base='../../'):
     side = meta.get('side')
     if not side:
         return ''
     fit = ' class="contain"' if side.get('contain') else ''
-    return (f'<figure class="side-media"><img src="../../assets/images/{side["img"]}" alt="{side["alt"]}"{fit} loading="lazy">'
+    return (f'<figure class="side-media"><img src="{base}assets/images/{side["img"]}" alt="{side["alt"]}"{fit} loading="lazy">'
             f'<figcaption>{side["caption"]}</figcaption></figure>')
 
 
-def robot_page(meta, body, prev_meta, next_meta):
+def robot_page(meta, body, prev_meta, next_meta, site_url=None):
     uses_stl = 'stl' in meta['art']
     importmap = (f'<script type="importmap">{{"imports":{{"three":"{THREE}build/three.module.js",'
                  f'"three/addons/":"{THREE}examples/jsm/"}}}}</script>') if uses_stl else ''
@@ -142,6 +150,7 @@ def robot_page(meta, body, prev_meta, next_meta):
       <p class="hero-lead">{meta['lead']}</p>
       <div class="hero-actions">
         <a class="btn btn-solid" href="#informe">Leer el informe</a>
+        {f'<a class="btn" href="{site_url}">Sitio del robot</a>' if site_url else ''}
         <a class="btn" href="{meta['repo']}" target="_blank" rel="noreferrer">Ver en GitHub</a>
         {extra_links}
       </div>
@@ -183,13 +192,32 @@ def main():
     print('index.html')
 
     robots = [read_robot(robot_id) for robot_id in ORDER]
+    site_urls = {robot_id: robot_site.read_site(SRC, robot_id)[0]['url'] for robot_id in ORDER}
     for i, (meta, body) in enumerate(robots):
         prev_meta = robots[i - 1][0]
         next_meta = robots[(i + 1) % len(robots)][0]
         out = ROOT / 'robots' / meta['id'] / 'index.html'
         out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(versioned(robot_page(meta, with_drawings(body), prev_meta, next_meta)), encoding='utf-8')
+        out.write_text(versioned(robot_page(meta, with_drawings(body), prev_meta, next_meta, site_urls[meta['id']])), encoding='utf-8')
         print(out.relative_to(ROOT).as_posix())
+
+    # Sitio propio de cada robot, escrito en su repositorio si está al lado de este.
+    sites = {}
+    for meta, _ in robots:
+        site_meta, showcase = robot_site.read_site(SRC, meta['id'])
+        sites[meta['id']] = {**site_meta, 'name': meta['name'], 'showcase': showcase}
+    parts = {'hero_art': hero_art, 'side_media': side_media, 'outline': outline, 'fonts': FONTS, 'three': THREE}
+    for meta, body in robots:
+        site = sites[meta['id']]
+        repo_dir = ROOT.parent / site['repo_dir']
+        if not (repo_dir / '.git').exists():
+            print(f'(omitido: no está ../{site["repo_dir"]})')
+            continue
+        showcase = robot_site.with_viewers(with_drawings(site['showcase']), viewer)
+        body_site = robot_site.site_links(with_drawings(body), sites)
+        page = robot_site.robot_site(meta, site, body_site, showcase, sites, parts)
+        (repo_dir / 'index.html').write_text(versioned(page), encoding='utf-8')
+        print(f'../{site["repo_dir"]}/index.html')
 
 
 if __name__ == '__main__':
