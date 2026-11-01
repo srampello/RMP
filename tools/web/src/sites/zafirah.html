@@ -1,0 +1,63 @@
+<!--
+{
+  "repo_dir": "RMP_Zafirah",
+  "url": "/RMP_Zafirah/",
+  "tagline": "Seguidor de línea de RMP Robotics y banco de pruebas del equipo: ocho sensores, un Arduino Nano y un PID cada 2 ms.",
+  "statement": {
+    "title": "Simple, para probar rápido.",
+    "text": "Zafirah compite con el hardware más sencillo del equipo. Cada idea de control se prueba primero en este robot antes de pasar a los demás."
+  }
+}
+-->
+<section class="feat" id="sensado">
+  <div class="feat-art">{{svg:zafirah}}</div>
+  <div class="feat-copy">
+    <p class="kicker">Sensado</p>
+    <h2>Ocho sensores, ocho entradas.</h2>
+    <p>Los QRE1113GR van directo a A0–A7 del Arduino Nano, sin multiplexor. Con el ADC acelerado, los ocho sensores con tres muestras cada uno se leen en menos de un milisegundo.</p>
+    <dl class="stats">
+      <div><dt>Sensores QRE1113GR</dt><dd>8</dd></div>
+      <div><dt>Muestras por sensor</dt><dd>3</dd></div>
+      <div><dt>Lectura completa</dt><dd>0,7<small>ms</small></dd></div>
+      <div><dt>Rango de posición</dt><dd>0–7000</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="feat flip" id="control">
+  <div class="feat-art"><pre>cada 2 ms
+  posición  ← readLine()        0–7000
+  error     = posición − 3500
+  PID       → corrección
+
+recta  |error| &lt; 300 por 200 ms  → 190
+curva  |error| &gt; 2500           → 135
+normal                           → 170</pre></div>
+  <div class="feat-copy">
+    <p class="kicker">Control</p>
+    <h2>Un PID cada dos milisegundos.</h2>
+    <p>El control corre a ritmo fijo y decide la velocidad base según el error: acelera cuando la recta se sostiene, frena apenas entra a una curva y sube con rampa al salir.</p>
+    <dl class="stats">
+      <div><dt>Ciclo de control</dt><dd>2<small>ms</small></dd></div>
+      <div><dt>Velocidad en recta</dt><dd>190<small>PWM</small></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="feat" id="traccion">
+  <div class="feat-art"><pre>TB6612FNG
+  canal A  →  motor derecho     D9 · D7 · D8
+  canal B  →  motor izquierdo   D10 · D4 · D5
+  PWM Timer1  ~31 kHz
+
+rueda interna:  −60 … 255</pre></div>
+  <div class="feat-copy">
+    <p class="kicker">Tracción</p>
+    <h2>La rueda interna también empuja para atrás.</h2>
+    <p>Dos N20 de 2000 rpm comandados por un TB6612FNG. En curvas cerradas la rueda interna puede girar hacia atrás, así el robot pivotea en lugar de abrirse, y el PWM a 31 kHz da un control más suave.</p>
+    <dl class="stats">
+      <div><dt>Motores N20</dt><dd>2000<small>rpm</small></dd></div>
+      <div><dt>PWM de motores</dt><dd>31<small>kHz</small></dd></div>
+    </dl>
+  </div>
+</section>

@@ -43,6 +43,24 @@ La v0.2 reemplaza a la versión ESP32-WROOM con sensores directos; su cableado n
 - **Ficha técnica:** [srampello.github.io/RMP/robots/unicum](https://srampello.github.io/RMP/robots/unicum/)
 - **Repositorio:** [srampello/RMP_unicum](https://github.com/srampello/RMP_unicum)
 
+### Zafirah
+
+Seguidor de línea de competición con Arduino Nano. Es el robot más simple del equipo y se usa como banco de pruebas para el control.
+
+| Área | Configuración actual |
+|---|---|
+| Controlador | Arduino Nano (ATmega328P) |
+| Sensores | 8 × QRE1113GR en A0–A7 |
+| Driver | TB6612FNG |
+| Tracción | 2 × N20 6 V 2000 RPM |
+| Interfaz | Botón de calibración, largada y pausa; LED de estado y de largada |
+| Control | PID cada 2 ms, velocidad extra en recta, freno en curva y reversa de la rueda interna |
+| Estado | Compitiendo; firmware v0.2 pendiente de prueba en pista |
+
+- **Ficha técnica:** [srampello.github.io/RMP/robots/zafirah](https://srampello.github.io/RMP/robots/zafirah/)
+- **Repositorio:** [srampello/RMP_Zafirah](https://github.com/srampello/RMP_Zafirah)
+- **Sitio del robot:** [srampello.github.io/RMP_Zafirah](https://srampello.github.io/RMP_Zafirah/)
+
 ## Micromouse y laberinto
 
 ### LEA_PAREDES
@@ -89,6 +107,7 @@ El Test Suite es la fuente de verdad del firmware V1. La versión Race se genera
 |---|---|---|---|---|
 | Deimonyag | Seguidor con succión | ESP32-C3 | 12 QRE1113GR + MUX | IFX9201SG |
 | UNICUM | Seguidor con MUX | ESP32-C3 | 12 QRE1113GR + MUX | TB6612FNG |
+| Zafirah | Seguidor de pruebas | Arduino Nano | 8 QRE1113GR | TB6612FNG |
 | LEA_PAREDES | Micromouse propio | ESP32-C3 | 4 pares IR | TB6612FNG |
 | AUS_KIM | Micromouse de pruebas | ESP32-C3 (V2) | 3 Sharp GP2Y0E03 + piso | DRV8833 |
 

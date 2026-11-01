@@ -12,6 +12,7 @@ Repositorio central de **RMP Robotics**. Funciona como índice de todos los robo
 |---|---|---|---|---|---|
 | [**Deimonyag**](https://srampello.github.io/RMP/robots/deimonyag/) | Competición con sistema de succión | ESP32-C3 Super Mini | 12 × QRE1113GR con CD74HC4067 | Hardware, firmware Wi-Fi y telemetría en desarrollo | [RMP_Deimonyag](https://github.com/srampello/RMP_Deimonyag) |
 | [**UNICUM**](https://srampello.github.io/RMP/robots/unicum/) | Seguidor compacto con selector DIP y MicroStart | ESP32-C3 Super Mini | 12 × QRE1113GR con 74HC4067 | Firmware v0.2, PCB sin rutear | [RMP_unicum](https://github.com/srampello/RMP_unicum) |
+| [**Zafirah**](https://srampello.github.io/RMP/robots/zafirah/) | Competición y banco de pruebas de control | Arduino Nano | 8 × QRE1113GR | Compitiendo; firmware v0.2 en pruebas | [RMP_Zafirah](https://github.com/srampello/RMP_Zafirah) |
 
 ### Micromouse y laberinto
 
@@ -28,6 +29,7 @@ La información ampliada de cada proyecto está en su ficha técnica del [sitio 
 |---|---|---|---|
 | Deimonyag | [Ficha](https://srampello.github.io/RMP/robots/deimonyag/) | [RMP_Deimonyag](https://github.com/srampello/RMP_Deimonyag) | [Visor de hardware](https://srampello.github.io/RMP_Deimonyag/) |
 | UNICUM | [Ficha](https://srampello.github.io/RMP/robots/unicum/) | [RMP_unicum](https://github.com/srampello/RMP_unicum) | |
+| Zafirah | [Ficha](https://srampello.github.io/RMP/robots/zafirah/) | [RMP_Zafirah](https://github.com/srampello/RMP_Zafirah) | [Sitio del robot](https://srampello.github.io/RMP_Zafirah/) |
 | LEA_PAREDES | [Ficha](https://srampello.github.io/RMP/robots/lea-paredes/) | [RMP_Lea_Paredes](https://github.com/srampello/RMP_Lea_Paredes) | |
 | AUS_KIM | [Ficha](https://srampello.github.io/RMP/robots/aus-kim/) | [AUS_KIM](https://github.com/srampello/AUS_KIM) | |
 

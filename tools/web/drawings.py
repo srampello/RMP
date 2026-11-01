@@ -72,4 +72,15 @@ d=(cell(False)+
    '<circle class="soft" cx="120" cy="122" r="5"/>'
    + sensors([(120,100),(76,134),(164,134)],3.6))
 aus=svg('aus',d,'Vista superior de AUS_KIM V2 dentro de una celda: tres sensores Sharp, sensor de piso y motores N20')
-DRAWINGS = {'deimonyag': deim, 'unicum': unic, 'lea-paredes': lea, 'aus-kim': aus}
+# Zafirah: barra recta de 8 sensores, Arduino Nano, TB6612FNG y N20
+k=1.3; x0=120-33.25*k
+pts=[(x0+i*9.5*k,66) for i in range(8)]
+d=('<path class="track" d="M160 290 C160 220 118 200 120 140 C122 80 120 40 120 -10"/>'
+   f'<rect class="body" x="{x0-9:.1f}" y="56" width="{66.5*k+18:.1f}" height="20" rx="3"/>'
+   '<path class="soft" d="M104 76 L108 164 M136 76 L132 164"/>'
+   '<rect class="body" x="86" y="164" width="68" height="76" rx="5"/>'
+   '<rect class="body" x="68" y="190" width="16" height="34" rx="3"/><rect class="body" x="156" y="190" width="16" height="34" rx="3"/>'
+   '<rect class="soft" x="100" y="174" width="18" height="44" rx="1"/><rect class="soft" x="124" y="186" width="18" height="18"/>'
+   + sensors(pts))
+zaf=svg('zafirah',d,'Vista superior de Zafirah: barra recta de 8 sensores, Arduino Nano y dos motores N20')
+DRAWINGS = {'deimonyag': deim, 'unicum': unic, 'zafirah': zaf, 'lea-paredes': lea, 'aus-kim': aus}
