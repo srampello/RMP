@@ -2,6 +2,8 @@
 {
   "repo_dir": "RMP_Zafirah",
   "url": "/RMP_Zafirah/",
+  "logo": "/RMP/assets/images/zafirah.webp",
+  "logo_alt": "Zafirah: una lámpara dorada con humo violeta sobre el nombre en letras doradas y en árabe",
   "tagline": "Seguidor de línea de RMP Robotics y banco de pruebas del equipo: ocho sensores, un Arduino Nano y un PID cada 2 ms.",
   "statement": {
     "title": "Simple, para probar rápido.",
@@ -9,7 +11,20 @@
   }
 }
 -->
-<section class="feat" id="sensado">
+<section class="feat" id="diseno">
+  <div class="feat-art"><img src="images/web/zafirah-robot.webp" alt="Zafirah armado: placa con Arduino Nano, driver TB6612FNG, batería y ruedas verdes, y la barra de sensores al final de un brazo largo" loading="lazy"></div>
+  <div class="feat-copy">
+    <p class="kicker">Diseño</p>
+    <h2>Los sensores, bien adelante.</h2>
+    <p>La barra de sensores va al final de un brazo largo, lejos del eje de las ruedas. Así el robot ve la curva antes de llegar y la corrección actúa con más palanca. Sobre la placa principal van el Arduino Nano, el TB6612FNG y la batería, entre los dos motores N20.</p>
+    <dl class="stats">
+      <div><dt>Sensores en la barra</dt><dd>8</dd></div>
+      <div><dt>Motores N20</dt><dd>2</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="feat flip" id="sensado">
   <div class="feat-art">{{svg:zafirah}}</div>
   <div class="feat-copy">
     <p class="kicker">Sensado</p>
@@ -24,7 +39,7 @@
   </div>
 </section>
 
-<section class="feat flip" id="control">
+<section class="feat" id="control">
   <div class="feat-art"><pre>cada 2 ms
   posición  ← readLine()        0–7000
   error     = posición − 3500
@@ -44,7 +59,7 @@ normal                           → 170</pre></div>
   </div>
 </section>
 
-<section class="feat" id="traccion">
+<section class="feat flip" id="traccion">
   <div class="feat-art"><pre>TB6612FNG
   canal A  →  motor derecho     D9 · D7 · D8
   canal B  →  motor izquierdo   D10 · D4 · D5

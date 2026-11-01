@@ -9,12 +9,14 @@
   "lead": "Seguidor de línea de competición con 8 sensores y Arduino Nano. Es el robot de pruebas: los cambios de control se ensayan primero acá.",
   "repo": "https://github.com/srampello/RMP_Zafirah",
   "art": {"svg": "zafirah"},
+  "side": {"img": "zafirah.webp", "alt": "Emblema de Zafirah: una lámpara dorada con humo violeta sobre el nombre en letras doradas y en árabe", "caption": "Zafirah, زافيرة", "contain": true},
   "figures": [["Sensores QRE1113GR", "8", ""], ["Ciclo de control", "2", "ms"], ["PWM de motores", "31", "kHz"], ["Motores N20", "2000", "rpm"]]
 }
 -->
 <section id="introduccion">
   <h2>Introducción</h2>
   <p>Zafirah (زافيرة) compite en seguidor de línea junto a los otros robots del equipo. Es el más simple: un <strong>Arduino Nano</strong>, una barra recta de ocho sensores y un TB6612FNG. Por eso se usa como banco de pruebas para el control.</p>
+  <figure><img src="/RMP/assets/images/zafirah-foto.webp" alt="Zafirah armado, con la barra de sensores al final de un brazo largo" loading="lazy"></figure>
   <p>La versión 0.2 (1 de noviembre de 2026) reorganizó el firmware para que el PID corra casi tres veces más seguido, con la misma lógica de recta y arranque suave de la v0.1.</p>
 </section>
 
@@ -32,7 +34,7 @@
   </table></div>
 
   <h3 id="sensores">Sensores</h3>
-  <p>Los ocho QRE1113GR se leen directo con el ADC del Nano, con los emisores siempre encendidos. A6 y A7 solo existen como entradas analógicas en el Nano, así que la barra ocupa justo las ocho. A0 queda a la izquierda y A7 a la derecha.</p>
+  <p>La barra va al final de un brazo largo, bien adelante del eje de las ruedas: el robot ve la curva antes y la corrección actúa con más palanca. Los ocho QRE1113GR se leen directo con el ADC del Nano, con los emisores siempre encendidos. A6 y A7 solo existen como entradas analógicas en el Nano, así que la barra ocupa justo las ocho. A0 queda a la izquierda y A7 a la derecha.</p>
 
   <h3 id="driver">Driver</h3>
   <p>El TB6612FNG queda habilitado con STBY en alto durante todo el funcionamiento. Desde la v0.2 el PWM de los dos motores sale del Timer1 a unos 31 kHz, en lugar de los 490 Hz de fábrica.</p>
