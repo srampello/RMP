@@ -54,8 +54,8 @@ Seguidor de línea de competición con Arduino Nano. Es el robot más simple del
 | Driver | TB6612FNG |
 | Tracción | 2 × N20 6 V 2000 RPM |
 | Interfaz | Botón de calibración, largada y pausa; LED de estado y de largada |
-| Control | PID cada 2 ms, velocidad extra en recta, freno en curva y reversa de la rueda interna |
-| Estado | Compitiendo; firmware v0.2 pendiente de prueba en pista |
+| Control | PID cada 2 ms, velocidad extra en recta, freno en curva, reversa de la rueda interna y giro de recuperación fuera de línea |
+| Estado | Compitiendo; firmware v0.3 pendiente de prueba en pista |
 
 - **Ficha técnica:** [srampello.github.io/RMP/robots/zafirah](https://srampello.github.io/RMP/robots/zafirah/)
 - **Repositorio:** [srampello/RMP_Zafirah](https://github.com/srampello/RMP_Zafirah)

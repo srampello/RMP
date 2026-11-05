@@ -29,11 +29,11 @@
   <div class="feat-copy">
     <p class="kicker">Sensado</p>
     <h2>Ocho sensores, ocho entradas.</h2>
-    <p>Los QRE1113GR van directo a A0–A7 del Arduino Nano, sin multiplexor. Con el ADC acelerado, los ocho sensores con tres muestras cada uno se leen en menos de un milisegundo.</p>
+    <p>Los QRE1113GR van directo a A0–A7 del Arduino Nano, sin multiplexor ni librerías. Cada sensor se convierte en 8 bits a 1 MHz, y solo los que superan el umbral de calibración entran en la posición.</p>
     <dl class="stats">
       <div><dt>Sensores QRE1113GR</dt><dd>8</dd></div>
-      <div><dt>Muestras por sensor</dt><dd>3</dd></div>
-      <div><dt>Lectura completa</dt><dd>0,7<small>ms</small></dd></div>
+      <div><dt>Umbral de línea</dt><dd>50<small>%</small></dd></div>
+      <div><dt>Lectura completa</dt><dd>0,2<small>ms</small></dd></div>
       <div><dt>Rango de posición</dt><dd>0–7000</dd></div>
     </dl>
   </div>
@@ -41,17 +41,18 @@
 
 <section class="feat" id="control">
   <div class="feat-art"><pre>cada 2 ms
-  posición  ← readLine()        0–7000
+  posición  ← leerLinea()       0–7000
   error     = posición − 3500
   PID       → corrección
 
 recta  |error| &lt; 300 por 200 ms  → 190
 curva  |error| &gt; 2500           → 135
-normal                           → 170</pre></div>
+normal                           → 170
+sin línea  último lado visto     → 220 / −150</pre></div>
   <div class="feat-copy">
     <p class="kicker">Control</p>
     <h2>Un PID cada dos milisegundos.</h2>
-    <p>El control corre a ritmo fijo y decide la velocidad base según el error: acelera cuando la recta se sostiene, frena apenas entra a una curva y sube con rampa al salir.</p>
+    <p>El control corre a ritmo fijo y decide la velocidad base según el error: acelera cuando la recta se sostiene, frena apenas entra a una curva y sube con rampa al salir. Si pierde la línea, gira fuerte hacia el último lado donde la vio.</p>
     <dl class="stats">
       <div><dt>Ciclo de control</dt><dd>2<small>ms</small></dd></div>
       <div><dt>Velocidad en recta</dt><dd>190<small>PWM</small></dd></div>
@@ -65,7 +66,8 @@ normal                           → 170</pre></div>
   canal B  →  motor izquierdo   D10 · D4 · D5
   PWM Timer1  ~31 kHz
 
-rueda interna:  −60 … 255</pre></div>
+rueda interna:  −60 … 255
+fuera de línea: −150 / 220</pre></div>
   <div class="feat-copy">
     <p class="kicker">Tracción</p>
     <h2>La rueda interna también empuja para atrás.</h2>
