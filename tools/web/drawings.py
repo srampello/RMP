@@ -72,15 +72,4 @@ d=(cell(False)+
    '<circle class="soft" cx="120" cy="122" r="5"/>'
    + sensors([(120,100),(76,134),(164,134)],3.6))
 aus=svg('aus',d,'Vista superior de AUS_KIM V2 dentro de una celda: tres sensores Sharp, sensor de piso y motores N20')
-# Zafirah: barra recta de 8 sensores al final de un brazo largo, Arduino Nano, TB6612FNG y N20
-k=1.3; x0=120-33.25*k
-pts=[(x0+i*9.5*k,40) for i in range(8)]
-d=('<path class="track" d="M160 290 C160 220 118 200 120 140 C122 80 120 30 120 -10"/>'
-   f'<rect class="body" x="{x0-9:.1f}" y="30" width="{66.5*k+18:.1f}" height="20" rx="3"/>'
-   '<rect class="body" x="113" y="50" width="14" height="140"/>'
-   '<rect class="body" x="84" y="190" width="72" height="56" rx="4"/>'
-   '<rect class="body" x="64" y="200" width="18" height="36" rx="5"/><rect class="body" x="158" y="200" width="18" height="36" rx="5"/>'
-   '<rect class="soft" x="94" y="198" width="22" height="16"/><rect class="soft" x="122" y="196" width="16" height="40" rx="1"/>'
-   + sensors(pts))
-zaf=svg('zafirah',d,'Vista superior de Zafirah: barra recta de 8 sensores, Arduino Nano y dos motores N20')
-DRAWINGS = {'deimonyag': deim, 'unicum': unic, 'zafirah': zaf, 'lea-paredes': lea, 'aus-kim': aus}
+DRAWINGS = {'deimonyag': deim, 'unicum': unic, 'lea-paredes': lea, 'aus-kim': aus}
