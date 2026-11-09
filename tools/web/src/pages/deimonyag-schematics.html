@@ -1,0 +1,46 @@
+<!--
+{
+  "robot": "deimonyag",
+  "file": "schematics.html",
+  "title": "Esquemáticos",
+  "description": "Visor de los esquemáticos de Deimonyag: placa principal y barra de 12 sensores.",
+  "scripts": ["/RMP/assets/js/schematic-viewer.js"]
+}
+-->
+    <div class="page-head">
+      <div>
+        <p class="ver">Revisión de hardware 0.2 · 12 de septiembre de 2026</p>
+        <h1>Esquemáticos</h1>
+        <p>La placa principal y la barra de 12 sensores, tal como salen de EasyEDA. Acercá con la rueda del mouse o con dos dedos y arrastrá para recorrerlos.</p>
+      </div>
+      <img src="/RMP/assets/images/deimonyag.webp" alt="" width="96" height="96">
+    </div>
+
+    <section class="sch" data-sch aria-label="Visor de esquemáticos">
+      <div class="sch-tools">
+        <div class="sch-tabs" role="tablist" aria-label="Esquemático">
+          <button type="button" role="tab" aria-selected="true" data-src="hardware/previews/SCH_Deimonyag_1-Main_Board_2026-09-12.svg" data-label="Esquemático de la placa principal de Deimonyag">Placa principal</button>
+          <button type="button" role="tab" aria-selected="false" data-src="hardware/previews/SCH_Deimonyag_2-12_Sensor_2026-09-12.svg" data-label="Esquemático de la barra de 12 sensores de Deimonyag">Barra de 12 sensores</button>
+        </div>
+        <div class="sch-zoom">
+          <button type="button" data-zoom="out" aria-label="Alejar">−</button>
+          <output data-zoom-level aria-live="polite">100 %</output>
+          <button type="button" data-zoom="in" aria-label="Acercar">+</button>
+          <button type="button" data-zoom="fit">Encuadrar</button>
+        </div>
+      </div>
+      <div class="sch-stage" tabindex="0" aria-label="Esquemático. Flechas para mover, + y − para el zoom, 0 para encuadrar.">
+        <img class="sch-sheet" alt="" draggable="false">
+      </div>
+      <p class="sch-status" data-sch-status aria-live="polite"></p>
+    </section>
+
+    <section class="page-links" aria-labelledby="sch-files">
+      <div class="rule-head"><h2 id="sch-files" style="font-size:inherit">Archivos</h2><span>Para abrir o descargar</span></div>
+      <div class="files">
+        <a href="hardware/previews/SCH_Deimonyag_1-Main_Board_2026-09-12.svg">Placa principal <span>SVG</span></a>
+        <a href="hardware/previews/SCH_Deimonyag_2-12_Sensor_2026-09-12.svg">Barra de 12 sensores <span>SVG</span></a>
+        <a href="https://github.com/srampello/RMP_Deimonyag/tree/master/hardware">Carpeta de hardware en GitHub <span>EasyEDA</span></a>
+        <a href="./#hardware">Hardware explicado en el informe <span>Informe</span></a>
+      </div>
+    </section>

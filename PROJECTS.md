@@ -21,7 +21,8 @@ Seguidor de línea de competición con sistema de succión y telemetría.
 
 - **Ficha técnica:** [srampello.github.io/RMP/robots/deimonyag](https://srampello.github.io/RMP/robots/deimonyag/)
 - **Repositorio:** [srampello/RMP_Deimonyag](https://github.com/srampello/RMP_Deimonyag)
-- **Visor de hardware:** [srampello.github.io/RMP_Deimonyag](https://srampello.github.io/RMP_Deimonyag/)
+- **Sitio del robot:** [srampello.github.io/RMP_Deimonyag](https://srampello.github.io/RMP_Deimonyag/)
+- **Esquemáticos:** [srampello.github.io/RMP_Deimonyag/schematics.html](https://srampello.github.io/RMP_Deimonyag/schematics.html)
 
 ### UNICUM
 

@@ -26,7 +26,7 @@ La información ampliada de cada proyecto está en su ficha técnica del [sitio 
 
 | Robot | Ficha técnica | Repositorio | Otros |
 |---|---|---|---|
-| Deimonyag | [Ficha](https://srampello.github.io/RMP/robots/deimonyag/) | [RMP_Deimonyag](https://github.com/srampello/RMP_Deimonyag) | [Visor de hardware](https://srampello.github.io/RMP_Deimonyag/) |
+| Deimonyag | [Ficha](https://srampello.github.io/RMP/robots/deimonyag/) | [RMP_Deimonyag](https://github.com/srampello/RMP_Deimonyag) | [Sitio del robot](https://srampello.github.io/RMP_Deimonyag/) · [Esquemáticos](https://srampello.github.io/RMP_Deimonyag/schematics.html) |
 | UNICUM | [Ficha](https://srampello.github.io/RMP/robots/unicum/) | [RMP_unicum](https://github.com/srampello/RMP_unicum) | |
 | LEA_PAREDES | [Ficha](https://srampello.github.io/RMP/robots/lea-paredes/) | [RMP_Lea_Paredes](https://github.com/srampello/RMP_Lea_Paredes) | |
 | AUS_KIM | [Ficha](https://srampello.github.io/RMP/robots/aus-kim/) | [AUS_KIM](https://github.com/srampello/AUS_KIM) | |

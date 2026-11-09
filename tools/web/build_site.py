@@ -6,6 +6,9 @@
 - src/robots/<id>.html    -> robots/<id>/index.html (ficha de cada robot)
 - src/sites/<id>.html     -> ../<repo del robot>/index.html (sitio propio del robot:
                              vitrina + el mismo informe de la ficha)
+- src/pages/<nombre>.html -> ../<repo del robot>/<archivo> (páginas extra del robot,
+                             como el visor de esquemáticos; el comentario inicial
+                             indica robot, archivo, título y scripts)
 
 Los sitios de cada robot usan la hoja de estilos, los scripts y los modelos 3D
 publicados en srampello.github.io/RMP/, así la estética queda en un solo lugar.
@@ -218,6 +221,21 @@ def main():
         page = robot_site.robot_site(meta, site, body_site, showcase, sites, parts)
         (repo_dir / 'index.html').write_text(versioned(page), encoding='utf-8')
         print(f'../{site["repo_dir"]}/index.html')
+
+    # Páginas extra de un robot (src/pages/*.html), con la misma barra y pie.
+    metas = {meta['id']: meta for meta, _ in robots}
+    for source in sorted((SRC / 'pages').glob('*.html')):
+        raw = source.read_text(encoding='utf-8')
+        match = re.match(r'\s*<!--(.*?)-->', raw, re.S)
+        page = json.loads(match.group(1))
+        site = sites[page['robot']]
+        repo_dir = ROOT.parent / site['repo_dir']
+        if not (repo_dir / '.git').exists():
+            print(f'(omitido: no está ../{site["repo_dir"]})')
+            continue
+        html_page = robot_site.extra_page(metas[page['robot']], site, page, raw[match.end():].strip('\n'), sites, parts)
+        (repo_dir / page['file']).write_text(versioned(html_page), encoding='utf-8')
+        print(f'../{site["repo_dir"]}/{page["file"]}')
 
 
 if __name__ == '__main__':

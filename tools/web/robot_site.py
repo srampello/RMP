@@ -134,3 +134,56 @@ def robot_site(meta, site, body, showcase, sites, parts):
 </body>
 </html>
 '''
+
+
+def extra_page(meta, site, page, content, sites, parts):
+    """Página adicional del sitio de un robot (por ejemplo, el visor de esquemáticos).
+
+    Usa la misma barra, tipografías, colores y pie que la página principal.
+    page: {"file", "title", "description", "scripts": [...]}.
+    """
+    current = ' aria-current="page"'
+    nav = ''.join(f'<a href="{href}"{current if href == page["file"] else ""}>{label}</a>'
+                  for label, href in site.get('nav', []))
+    scripts = ''.join(f'<script src="{src}" defer></script>' for src in page.get('scripts', []))
+    others = ''.join(f'<a href="{s["url"]}">{s["name"]}</a>' for r, s in sites.items() if r != meta['id'])
+    return f'''<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="{page['description']}">
+  <title>{page['title']} · {meta['name']} — RMP Robotics</title>
+  <link rel="icon" href="{CENTRAL}assets/images/rmp-logo.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="{parts['fonts']}" rel="stylesheet">
+  <link rel="stylesheet" href="{CENTRAL}assets/css/styles.css">
+</head>
+<body>
+  <a class="skip" href="#contenido">Ir al contenido</a>
+
+  <header class="bar">
+    <a href="{CENTRAL}"><img src="{CENTRAL}assets/images/rmp-logo.webp" alt="" width="26" height="26"> RMP Robotics</a>
+    <a class="bar-title" href="./">{meta['name']}</a>
+    <nav class="bar-nav" aria-label="Secciones">
+      <a href="./#informe">Informe técnico</a>
+      {nav}
+      <a class="gh" href="{meta['repo']}" target="_blank" rel="noreferrer">GitHub</a>
+    </nav>
+  </header>
+
+  <main id="contenido">
+{content}
+  </main>
+
+  <footer class="site-foot robot-foot">
+    <span>{meta['name']} es un proyecto de <a href="{CENTRAL}">RMP Robotics</a></span>
+    <nav aria-label="Otros robots">{others}</nav>
+  </footer>
+
+  {scripts}
+</body>
+</html>
+'''
